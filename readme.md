@@ -6,7 +6,7 @@ Site **fictício** de restaurante, desenvolvido como projeto de portfólio para 
 
 ## 🔗 Demo
 
-👉 [Ver site no GitHub Pages](https://samueldev88.github.io/ben-juan-restaurant/)
+👉 [Ver site no GitHub Pages](https://samueldev88.github.io/ben.juan.restaurant/)
 
 ## ✨ Funcionalidades
 
