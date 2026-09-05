@@ -1,0 +1,55 @@
+/* =========================================================
+   ESTILOS COMPARTILHADOS — Ben Juan Restaurant
+   Usado por: index.html, reserva.html e pedidos.html
+   Contém apenas o que é IDÊNTICO nas três páginas:
+   paleta de cores e navbar. Cada página mantém seus próprios
+   estilos específicos (top-bar, phone, formulários etc.)
+   dentro da própria tag <style>.
+   ========================================================= */
+
+:root{
+  --navy: #c9a24d;       /* dourado — acento principal */
+  --navy-deep: #0b0906;  /* quase preto — navbar/rodapé */
+  --cream: #15110c;      /* fundo principal escuro */
+  --coral: #d8503c;
+  --sand: #e7dcc2;       /* texto claro sobre fundos escuros */
+  --ink: #f3ead9;        /* texto principal claro */
+  --amber: #c8862e;
+  --green: #4a8a5f;
+  --card: #201a13;       /* superfície elevada (cards) */
+  --border: #3a3025;     /* bordas/divisores */
+  --muted: #a89f8f;      /* texto secundário */
+}
+
+/* ===== NAVBAR (igual nas três páginas) ===== */
+.navbar{
+  background: var(--navy-deep) !important;
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+  width: 100%;
+}
+.navbar-brand{
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: 28px;
+  color: var(--navy) !important;
+}
+.navbar-nav .nav-link{
+  color: var(--sand) !important;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  padding: 8px 14px !important;
+  transition: color .15s ease;
+}
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active{
+  color: var(--navy) !important;
+}
+.navbar-toggler{
+  border-color: var(--border);
+}
+.navbar-toggler-icon{
+  filter: invert(1) grayscale(1) brightness(2);
+}

@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Faça seu Pedido — Sobre As Ondas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link href="style.css" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+<style>
+  /* :root (paleta) e .navbar agora vêm de style.css */
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background: var(--cream);
+    font-family:'DM Sans', sans-serif;
+    color: var(--ink);
+    min-height:100vh;
+  }
+
+  /* ===== APP DE PEDIDOS ===== */
+  .phone-wrap{
+    display:flex;
+    justify-content:center;
+    padding-bottom: 40px;
+  }
+  .phone{
+    width:100%;
+    max-width:460px;
+    min-height:70vh;
+    background: var(--cream);
+    position:relative;
+    border-radius: 18px;
+    overflow:hidden;
+    box-shadow: 0 20px 50px rgba(14,33,56,0.12);
+  }
+
+  .top-bar{
+    background: var(--navy-deep);
+    padding: 18px 20px 0;
+  }
+  .top-bar-header{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .top-bar-titles{
+    flex:1;
+    min-width:0;
+  }
+  .top-bar-title{
+    color: var(--cream);
+    font-family:'Caveat', cursive;
+    font-size: 30px;
+    font-weight:700;
+    line-height:1;
+  }
+  .top-bar-sub{
+    color: var(--sand);
+    font-size: 12.5px;
+    margin-top: 2px;
+  }
+  .top-bar-actions{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    flex-shrink:0;
+  }
+  .icon-btn{
+    width:34px; height:34px;
+    border-radius:50%;
+    background: rgba(255,255,255,0.12);
+    color: var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    text-decoration:none;
+    border:none;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .icon-btn svg{ width:16px; height:16px; }
+  .lang-switch{ position:relative; }
+  .lang-menu{
+    display:none;
+    position:absolute;
+    top: calc(100% + 8px);
+    right:0;
+    background: var(--card);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    padding: 6px;
+    z-index: 50;
+    min-width: 150px;
+  }
+  .lang-menu.open{ display:block; }
+  .lang-option{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    font-family:'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight:600;
+    color: var(--ink);
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .lang-option:hover{ background: rgba(255,255,255,0.06); }
+  .lang-option.active{ background: var(--navy); color: var(--navy-deep); }
+
+  .tabs{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    padding-bottom: 8px;
+  }
+  .tab{
+    flex: 0 1 auto;
+    min-width: 100px;
+    text-align:center;
+    padding: 12px 10px;
+    font-size: 14px;
+    font-weight:600;
+    color: var(--sand);
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px 10px 0 0;
+    cursor:pointer;
+  }
+  .tab.active{
+    background: var(--cream);
+    color: var(--ink);
+  }
+  .tab.hidden{ display:none; }
+
+  .view{
+    display:none;
+    padding: 18px 18px 10px;
+  }
+  .view.active{ display:block; }
+
+  /* CLIENTE */
+
+  .mesa-input{
+    background: var(--card);
+    border-radius: 12px;
+    padding: 12px 14px;
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(22,48,79,0.06);
+  }
+  .mesa-input svg{width:18px; height:18px; color: var(--navy); flex-shrink:0;}
+  .mesa-input input{
+    border:none; outline:none;
+    background: transparent;
+    font-family:'DM Sans', sans-serif;
+    font-size: 14.5px;
+    width:100%;
+    color: var(--ink);
+  }
+  .mesa-input input::placeholder{
+    color: var(--muted);
+    opacity: 1;
+  }
+
+  .cat-title{
+    font-size: 13px;
+    font-weight:700;
+    letter-spacing: 1px;
+    color: var(--coral);
+    text-transform:uppercase;
+    margin: 16px 0 8px;
+  }
+
+  .menu-item{
+    background: var(--card);
+    border-radius: 12px;
+    padding: 12px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 6px rgba(22,48,79,0.05);
+    border: 1.5px solid transparent;
+    transition: border-color .15s ease;
+  }
+  .menu-item.in-cart{ border-color: var(--navy); }
+  .item-name{ font-weight:600; font-size:14.5px; color: var(--ink); }
+  .item-price{ font-size:12.5px; color:var(--muted); margin-top:2px; }
+  .menu-item.esgotado{ opacity:0.55; cursor:default; }
+  .menu-item.esgotado .item-name{ text-decoration: line-through; color:var(--muted); }
+  .item-esgotado-tag{
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:0.3px;
+    color:#e2694b;
+    margin-top:2px;
+    text-transform:uppercase;
+  }
+  .estoque-item{
+    background: var(--card);
+    border-radius: 12px;
+    padding: 12px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 6px rgba(22,48,79,0.05);
+    cursor:pointer;
+    user-select:none;
+  }
+  .estoque-item .item-name{ font-weight:600; font-size:14.5px; color: var(--ink); }
+  .estoque-toggle{
+    width:44px; height:26px;
+    border-radius:14px;
+    background: var(--green);
+    position:relative;
+    flex-shrink:0;
+    transition: background 0.15s;
+  }
+  .estoque-toggle.off{ background: var(--border); }
+  .estoque-toggle .knob{
+    width:20px; height:20px;
+    border-radius:50%;
+    background: var(--ink);
+    position:absolute;
+    top:3px; left:21px;
+    transition: left 0.15s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  }
+  .estoque-toggle.off .knob{ left:3px; }
+  .qty-control{
+    display:flex; align-items:center; gap:10px;
+  }
+  .qty-btn{
+    width:26px; height:26px;
+    border-radius:50%;
+    border: 1.5px solid var(--border);
+    background: var(--card);
+    color: var(--navy);
+    font-size:16px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    user-select:none;
+  }
+  .qty-num{ font-weight:600; min-width:14px; text-align:center; font-size:14px; }
+
+  /* ===== CARRINHO FLUTUANTE ===== */
+  /* Some quando o carrinho está vazio; "aparece do nada" com uma animação
+     de pop assim que o primeiro item é adicionado, no canto inferior
+     direito da tela — funciona tanto no site normal quanto no mobile,
+     já que é position:fixed em relação à janela, não à pasta ".phone". */
+  .floating-cart{
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 400;
+    background: var(--coral);
+    color: #fff;
+    border-radius: 999px;
+    padding: 14px 20px;
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    box-shadow: 0 12px 28px rgba(216,80,60,0.45);
+    cursor:pointer;
+    font-weight:700;
+    font-size: 14.5px;
+    transform: scale(0);
+    opacity: 0;
+    transition: transform .3s cubic-bezier(.34,1.56,.64,1), opacity .2s ease;
+    pointer-events: none;
+  }
+  .floating-cart.show{
+    transform: scale(1);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .floating-cart-icon{
+    font-size: 19px;
+    line-height:1;
+  }
+  .floating-cart-count{
+    background: rgba(255,255,255,0.28);
+    border-radius: 999px;
+    padding: 2px 9px;
+    font-size: 12.5px;
+    font-weight:700;
+  }
+  .floating-cart-total{
+    font-size: 14.5px;
+  }
+  @media (max-width: 480px){
+    .floating-cart{
+      right: 14px;
+      bottom: 14px;
+      padding: 12px 16px;
+      font-size: 13.5px;
+    }
+    .floating-cart-icon{ font-size:17px; }
+  }
+
+  /* EQUIPE */
+  .col-title{
+    font-size: 12.5px;
+    font-weight:700;
+    letter-spacing: 1px;
+    text-transform:uppercase;
+    margin-bottom: 10px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .dot{ width:8px; height:8px; border-radius:50%; }
+  .board{
+    display:flex;
+    flex-direction:column;
+    gap: 22px;
+  }
+  .order-card{
+    background: var(--card);
+    border-radius: 12px;
+    padding: 13px 14px;
+    box-shadow: 0 2px 8px rgba(22,48,79,0.07);
+    margin-bottom: 10px;
+    border-left: 4px solid var(--border);
+  }
+  .order-card.recebido{ border-left-color: var(--coral); }
+  .order-card.preparando{ border-left-color: var(--amber); }
+  .order-card.pronto{ border-left-color: var(--green); }
+  .order-card.aguardando_pagamento{ border-left-color: #e2694b; }
+
+  .order-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom: 6px;
+  }
+  .order-mesa{ font-weight:700; font-size:14.5px; color: var(--ink); }
+  .order-time{ font-size:11px; color:var(--muted); }
+  .order-items{
+    font-size: 13px;
+    color: var(--muted);
+    line-height:1.5;
+    margin-bottom: 10px;
+  }
+  .order-actions{
+    display:flex;
+    gap:8px;
+    justify-content:flex-end;
+  }
+  .status-btn{
+    flex:1;
+    text-align:center;
+    padding: 8px 4px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight:600;
+    cursor:pointer;
+    border: 1px solid transparent;
+  }
+  .status-btn.next{
+    background: var(--navy);
+    color: var(--navy-deep);
+  }
+  .status-btn.done{
+    background: transparent;
+    color: var(--green);
+    border-color: var(--green);
+  }
+  .trash-btn{
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 1px solid rgba(216,80,60,0.3);
+    color: var(--coral);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    transition: background 0.15s ease;
+  }
+  .trash-btn:hover{ background: rgba(216,80,60,0.1); }
+  .trash-btn svg{ width:16px; height:16px; }
+
+  .empty-msg{
+    font-size: 13px;
+    color: var(--muted);
+    font-style:italic;
+    padding: 6px 2px 4px;
+  }
+
+  .footer-note{
+    text-align:center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 20px;
+    padding: 0 30px 10px;
+    line-height:1.5;
+  }
+  .staff-access{
+    text-align:center;
+    font-size: 11.5px;
+    color: var(--muted);
+    padding-bottom: 20px;
+    cursor:pointer;
+    text-decoration: underline;
+  }
+
+  .staff-cta-row{
+    display:flex;
+    gap:8px;
+    padding: 6px 18px 20px;
+  }
+  .staff-cta-btn{
+    flex:1;
+    text-align:center;
+    padding: 11px 8px;
+    border-radius: 10px;
+    font-family:'Poppins', sans-serif;
+    font-size: 12.5px;
+    font-weight:600;
+    cursor:pointer;
+    user-select:none;
+  }
+  .staff-cta-primary{
+    background: var(--navy);
+    color: var(--navy-deep);
+  }
+  .staff-cta-ghost{
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--ink);
+  }
+
+  .demo-banner{
+    text-align:center;
+    font-size: 12px;
+    font-weight:600;
+    color: var(--navy-deep);
+    background: var(--navy);
+    padding: 8px 14px;
+    margin: 0 18px 10px;
+    border-radius: 10px;
+  }
+  .demo-banner.hidden{ display:none; }
+
+  .modal-bg{
+    display:none;
+    position:fixed; inset:0;
+    background: rgba(0,0,0,0.65);
+    align-items:flex-end;
+    justify-content:center;
+    z-index: 500;
+  }
+  .modal-bg.show{ display:flex; }
+  .ped-modal{
+    background: var(--card);
+    width:100%; max-width:460px;
+    border-radius: 18px 18px 0 0;
+    padding: 20px 20px 26px;
+    max-height:80vh;
+    overflow-y:auto;
+    border-top: 1px solid var(--border);
+  }
+  .ped-modal h3{ font-size:18px; color:var(--ink); margin-bottom:14px; }
+  .modal-row{
+    display:flex; justify-content:space-between;
+    font-size: 14px; padding: 7px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .modal-total{
+    display:flex; justify-content:space-between;
+    font-weight:700; font-size:16px;
+    padding-top:12px;
+  }
+  .confirm-btn{
+    margin-top:16px;
+    background: var(--coral);
+    color:#fff;
+    text-align:center;
+    padding:14px;
+    border-radius: 12px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .close-modal{
+    text-align:center;
+    font-size:13px;
+    color:var(--muted);
+    margin-top:12px;
+    cursor:pointer;
+  }
+
+  /* ===== PAGAMENTO ===== */
+  .pay-back{
+    text-align:center;
+    font-size:13px;
+    color:var(--muted);
+    margin-top:14px;
+    cursor:pointer;
+  }
+
+  .mp-aviso{
+    font-size:12.5px;
+    color:var(--muted);
+    line-height:1.5;
+    margin-bottom:16px;
+    background: var(--cream);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .spinner{
+    width:22px; height:22px;
+    border:3px solid var(--border);
+    border-top-color: var(--coral);
+    border-radius:50%;
+    margin: 0 auto 10px;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .erro-pagamento{
+    color:#ff6b57;
+    font-size:12.5px;
+    margin-top:10px;
+    display:none;
+  }
+
+  /* modal de senha */
+  .senha-modal input{
+    width:100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    font-family:'DM Sans', sans-serif;
+    font-size: 14.5px;
+    margin-bottom: 10px;
+  }
+  .senha-erro{
+    color: var(--coral);
+    font-size: 12.5px;
+    margin-bottom: 8px;
+    display:none;
+  }
+
+  /* ===== RESERVAS (painel da equipe) ===== */
+  .reserva-card{
+    background: var(--card);
+    border-radius: 12px;
+    padding: 13px 14px;
+    box-shadow: 0 2px 8px rgba(22,48,79,0.07);
+    margin-bottom: 10px;
+    border-left: 4px solid var(--green);
+  }
+  .reserva-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom: 6px;
+  }
+  .reserva-nome{ font-weight:700; font-size:15px; color: var(--ink); margin-bottom:4px; }
+  .reserva-data{ font-weight:700; font-size:14.5px; color: var(--ink); }
+  .reserva-horario{ font-size:12.5px; color:var(--muted); }
+  .reserva-info{
+    font-size: 13px;
+    color: var(--muted);
+    line-height:1.5;
+    margin-bottom: 10px;
+  }
+
+  /* ===== ACOMPANHAR PEDIDO (tela do cliente) ===== */
+  .track-mesa{
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+  .track-mesa b{ color: var(--ink); }
+  .track-steps{
+    display:flex;
+    align-items:center;
+    margin-bottom: 22px;
+  }
+  .track-step{
+    flex:1;
+    text-align:center;
+  }
+  .track-step .circle{
+    width:34px; height:34px;
+    border-radius:50%;
+    background: var(--border);
+    color: var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700;
+    font-size:14px;
+    margin: 0 auto 6px;
+    transition: background .25s ease, color .25s ease;
+  }
+  .track-step.done .circle{
+    background: var(--green);
+    color:#fff;
+  }
+  .track-step.current .circle{
+    background: var(--coral);
+    color:#fff;
+  }
+  .track-step .label{
+    font-size: 11.5px;
+    font-weight:600;
+    color:var(--muted);
+  }
+  .track-step.done .label,
+  .track-step.current .label{
+    color: var(--ink);
+  }
+  .track-line{
+    flex:0.6;
+    height: 2px;
+    background: var(--border);
+    margin-bottom: 24px;
+  }
+  .track-line.done{ background: var(--green); }
+  .track-items{
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height:1.6;
+    background: var(--card);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+  }
+  .track-msg{
+    text-align:center;
+    font-size: 14px;
+    font-weight:600;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .track-sub{
+    text-align:center;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+
+  @media (max-width: 480px){
+    .phone{ border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Ben Juan Restaurant</a>
+            <div class="lang-switch navbar-lang ms-auto me-2">
+              <button class="icon-btn" onclick="toggleLangMenu(event)" title="Idiomas / Languages" aria-label="Idiomas">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+              </button>
+              <div class="lang-menu" id="langMenu">
+                <div class="lang-option" data-lang="pt" onclick="setLang('pt')">🇧🇷 Português</div>
+                <div class="lang-option" data-lang="en" onclick="setLang('en')">🇺🇸 English</div>
+                <div class="lang-option" data-lang="es" onclick="setLang('es')">🇪🇸 Español</div>
+              </div>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#perfil">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#projetos">Cardápio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#contato">Contato</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tabCliente" data-i18n="tabPedido" href="#" onclick="switchTab('cliente'); return false;">Fazer Pedido</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabMeusPedidos" data-i18n="tabMeusPedidos" href="#" onclick="switchTab('meusPedidos'); return false;">Seus Pedidos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reserva.html">Reservas</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="phone-wrap">
+<div class="phone">
+  <div class="demo-banner hidden" id="demoBanner">👀 Modo demonstração — dados fictícios, nada aqui é salvo de verdade</div>
+  <div class="tabs">
+    <div class="tab active" id="tabCardapio" data-i18n="tabCardapio" onclick="switchTab('cliente')">Cardápio</div>
+    <div class="tab" id="tabSeusPedidosPhone" data-i18n="tabMeusPedidos" onclick="switchTab('meusPedidos')">Seus Pedidos</div>
+    <div class="tab hidden" id="tabEquipe" onclick="switchTab('equipe')">Painel da Equipe</div>
+    <div class="tab hidden" id="tabReservas" onclick="switchTab('reservas')">Reservas</div>
+    <div class="tab hidden" id="tabEstoque" onclick="switchTab('estoque')">Estoque</div>
+    <div class="tab hidden" id="tabLixeira" onclick="switchTab('lixeira')">Lixeira</div>
+  </div>
+
+  <!-- VISÃO CLIENTE -->
+  <div class="view active" id="viewCliente">
+
+    <div class="mesa-input" id="mesaInputWrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <input type="text" id="mesaNumero" data-i18n-placeholder="placeholderMesa" placeholder="Número da mesa (ex: 7)">
+    </div>
+
+    <div class="cat-title" data-i18n="catEntradas">Entradas</div>
+    <div id="menuEntradas"></div>
+
+    <div class="cat-title" data-i18n="catPrincipais">Pratos Principais</div>
+    <div id="menuPrincipais"></div>
+
+    <div class="cat-title" data-i18n="catSobremesas">Sobremesas</div>
+    <div id="menuSobremesas"></div>
+
+    <div class="cat-title" data-i18n="catBebidas">Bebidas</div>
+    <div id="menuBebidas"></div>
+
+    <div class="cat-title" data-i18n="catDrinks">Drinks</div>
+    <div id="menuDrinks"></div>
+  </div>
+
+  <!-- VISÃO "SEUS PEDIDOS" (cliente acompanha em tempo real) -->
+  <div class="view" id="viewMeusPedidos">
+    <div id="listaMeusPedidos"></div>
+  </div>
+
+  <!-- VISÃO EQUIPE -->
+  <div class="view" id="viewEquipe">
+
+    <div id="secaoPagamentoPendente" style="display:none; margin-bottom:22px;">
+      <div class="col-title" style="color:#e2694b;"><span class="dot" style="background:#e2694b;"></span> Pagamento pendente</div>
+      <div id="colPagamentoPendente"></div>
+    </div>
+
+    <div class="board">
+      <div>
+        <div class="col-title" style="color:var(--coral);"><span class="dot" style="background:var(--coral);"></span> Recebido</div>
+        <div id="colRecebido"></div>
+      </div>
+      <div>
+        <div class="col-title" style="color:var(--amber);"><span class="dot" style="background:var(--amber);"></span> Preparando</div>
+        <div id="colPreparando"></div>
+      </div>
+      <div>
+        <div class="col-title" style="color:var(--green);"><span class="dot" style="background:var(--green);"></span> Pronto</div>
+        <div id="colPronto"></div>
+      </div>
+    </div>
+    <div class="staff-access" style="margin-top:20px;" onclick="sairEquipe()">Sair da conta da equipe</div>
+  </div>
+
+  <!-- VISÃO RESERVAS (equipe) -->
+  <div class="view" id="viewReservas">
+    <div class="col-title" style="color:var(--navy);"><span class="dot" style="background:var(--navy);"></span> Reservas</div>
+    <div id="listaReservas"></div>
+    <div class="staff-access" style="margin-top:20px;" onclick="sairEquipe()">Sair da conta da equipe</div>
+  </div>
+
+  <!-- VISÃO ESTOQUE (equipe) — marcar itens em falta na cozinha -->
+  <div class="view" id="viewEstoque">
+    <div class="col-title" style="color:var(--navy);"><span class="dot" style="background:var(--navy);"></span> Estoque</div>
+    <div style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Toque para marcar um item como esgotado. Ele some das opções disponíveis pro cliente na hora.</div>
+    <div id="listaEstoque"></div>
+    <div class="staff-access" style="margin-top:20px;" onclick="sairEquipe()">Sair da conta da equipe</div>
+  </div>
+
+  <!-- VISÃO LIXEIRA (equipe) — pedidos e reservas apagados, com opção de restaurar -->
+  <div class="view" id="viewLixeira">
+    <div class="col-title" style="color:#e2694b;"><span class="dot" style="background:#e2694b;"></span> Lixeira</div>
+    <div style="font-size:12.5px; color:var(--muted); margin-bottom:14px;">Itens apagados ficam guardados aqui por 30 dias antes de sumir de vez. Dá pra restaurar a qualquer momento nesse prazo.</div>
+    <div class="cat-title" style="margin-top:0;">Pedidos apagados</div>
+    <div id="listaLixeiraPedidos"></div>
+    <div class="cat-title">Reservas apagadas</div>
+    <div id="listaLixeiraReservas"></div>
+    <div class="staff-access" style="margin-top:20px;" onclick="sairEquipe()">Sair da conta da equipe</div>
+  </div>
+
+  <div class="footer-note" data-i18n="footerNote">
+    Os pedidos são enviados em tempo real para a equipe.
+  </div>
+  <a href="termos-privacidade.pdf" target="_blank" style="display:block; text-align:center; font-size:11px; color:var(--muted); text-decoration:underline; margin-top:6px;">Política de Privacidade e Termos de Uso</a>
+  <div class="staff-cta-row">
+    <div class="staff-cta-btn staff-cta-primary" data-i18n="staffAccess" onclick="abrirDemo()">🔒 Acesso da equipe</div>
+  </div>
+</div>
+</div>
+
+<!-- CARRINHO FLUTUANTE — position:fixed em relação à tela, não à ".phone",
+     por isso fica fora dela. Só aparece (com animação de pop) quando tem
+     pelo menos 1 item adicionado. -->
+<div class="floating-cart" id="floatingCart" onclick="openCart()">
+  <span class="floating-cart-icon">🛒</span>
+  <span class="floating-cart-count" id="floatingCartCount">0</span>
+  <span class="floating-cart-total" id="floatingCartTotal">R$ 0</span>
+</div>
+
+<!-- MODAL CARRINHO -->
+<div class="modal-bg" id="modalBg">
+  <div class="ped-modal">
+
+    <div id="stepItens">
+      <h3 data-i18n="modalConfirmarPedido">Confirmar pedido</h3>
+      <div id="modalItems"></div>
+      <div class="modal-total"><span data-i18n="modalTotal">Total</span><span id="modalTotalValue">R$ 0</span></div>
+
+      <div class="mp-aviso" style="margin-top:14px; margin-bottom:0;" data-i18n="mpAviso">⚠️ Este é um site fictício, feito para demonstração. Não existe cobrança real — mas, ao confirmar, seu pedido é enviado normalmente para o painel da equipe.</div>
+
+      <div id="pedidoCarregando" style="display:none; text-align:center; margin-top:14px;">
+        <div class="spinner"></div>
+        <div class="mp-aviso" style="margin-bottom:0;" data-i18n="mpPreparando">Enviando pedido...</div>
+      </div>
+
+      <div class="confirm-btn" id="btnConfirmarPedido" onclick="confirmarPedidoFicticio()" data-i18n="btnIrPagamento">Confirmar pedido</div>
+      <div class="erro-pagamento" id="cartaoErro" data-i18n="mpErro">Não foi possível enviar o pedido. Confere sua conexão e tenta de novo.</div>
+      <div class="close-modal" onclick="closeCart()" data-i18n="btnVoltarCardapio">Voltar ao cardápio</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const translations = {
+    pt: {
+      tabPedido: 'Fazer Pedido',
+      tabCardapio: 'Cardápio',
+      tabMeusPedidos: 'Seus Pedidos',
+      localMesa: 'Mesa',
+      placeholderMesa: 'Número da mesa (ex: 7)',
+      catEntradas: 'Entradas',
+      catPrincipais: 'Pratos Principais',
+      catSobremesas: 'Sobremesas',
+      catBebidas: 'Bebidas',
+      catDrinks: 'Drinks',
+      esgotado: 'Esgotado',
+      footerNote: 'Os pedidos são enviados em tempo real para a equipe.',
+      staffAccess: 'Acesso da equipe',
+      modalConfirmarPedido: 'Confirmar pedido',
+      modalTotal: 'Total',
+      btnVoltarCardapio: 'Voltar ao cardápio',
+      mpAviso: 'Este é um site fictício, feito para demonstração. Esta forma de pagamento não é real e não vai funcionar — mas, ao confirmar, seu pedido é enviado normalmente para o painel da equipe.',
+      mpPreparando: 'Enviando pedido...',
+      btnIrPagamento: 'Confirmar pedido',
+      mpErro: 'Não foi possível enviar o pedido. Confere sua conexão e tenta de novo.',
+      semPedidos: 'Você ainda não fez nenhum pedido por aqui.',
+      carregando: 'Carregando...',
+      removerLista: 'Remover da lista',
+      stepRecebido: 'Recebido',
+      stepPreparando: 'Preparando',
+      stepPronto: 'Pronto',
+      statusAguardando: ['Aguardando confirmação do pagamento', 'Assim que confirmarmos, seu pedido segue pra cozinha.'],
+      statusRecebido: ['Recebemos seu pedido!', 'A equipe já foi avisada.'],
+      statusPreparando: ['Está sendo preparado', 'Não deve demorar :)'],
+      statusPronto: ['Pronto!', 'Pode retirar ou aguardar na mesa.']
+    },
+    en: {
+      tabPedido: 'Order',
+      tabCardapio: 'Menu',
+      tabMeusPedidos: 'Your Orders',
+      localMesa: 'Table',
+      placeholderMesa: 'Table number (e.g. 7)',
+      catEntradas: 'Starters',
+      catPrincipais: 'Main Courses',
+      catSobremesas: 'Desserts',
+      catBebidas: 'Beverages',
+      catDrinks: 'Drinks',
+      esgotado: 'Sold out',
+      footerNote: 'Orders are sent to the staff in real time.',
+      staffAccess: 'Staff access',
+      modalConfirmarPedido: 'Confirm order',
+      modalTotal: 'Total',
+      btnVoltarCardapio: 'Back to menu',
+      mpAviso: "This is a fictitious demo site. This payment method isn't real and won't actually work — but once confirmed, your order is still sent normally to the staff panel.",
+      mpPreparando: 'Sending order...',
+      btnIrPagamento: 'Confirm order',
+      mpErro: 'Could not send the order. Check your connection and try again.',
+      semPedidos: "You haven't placed any orders here yet.",
+      carregando: 'Loading...',
+      removerLista: 'Remove from list',
+      stepRecebido: 'Received',
+      stepPreparando: 'Preparing',
+      stepPronto: 'Ready',
+      statusAguardando: ['Waiting for payment confirmation', "Once confirmed, your order goes to the kitchen."],
+      statusRecebido: ['We got your order!', 'The staff has been notified.'],
+      statusPreparando: ['Being prepared', "Won't be long :)"],
+      statusPronto: ['Ready!', 'You can pick it up or wait at your table.']
+    },
+    es: {
+      tabPedido: 'Hacer Pedido',
+      tabCardapio: 'Menú',
+      tabMeusPedidos: 'Tus Pedidos',
+      localMesa: 'Mesa',
+      placeholderMesa: 'Número de la mesa (ej: 7)',
+      catEntradas: 'Entradas',
+      catPrincipais: 'Platos Principales',
+      catSobremesas: 'Postres',
+      catBebidas: 'Bebidas',
+      catDrinks: 'Cócteles',
+      esgotado: 'Agotado',
+      footerNote: 'Los pedidos se envían al equipo en tiempo real.',
+      staffAccess: 'Acceso del equipo',
+      modalConfirmarPedido: 'Confirmar pedido',
+      modalTotal: 'Total',
+      btnVoltarCardapio: 'Volver al menú',
+      mpAviso: 'Este es un sitio ficticio, hecho para demostración. Esta forma de pago no es real y no va a funcionar, pero al confirmar, tu pedido igual se envía normalmente al panel del equipo.',
+      mpPreparando: 'Enviando pedido...',
+      btnIrPagamento: 'Confirmar pedido',
+      mpErro: 'No fue posible enviar el pedido. Revisa tu conexión e inténtalo de nuevo.',
+      semPedidos: 'Aún no has hecho ningún pedido aquí.',
+      carregando: 'Cargando...',
+      removerLista: 'Quitar de la lista',
+      stepRecebido: 'Recibido',
+      stepPreparando: 'Preparando',
+      stepPronto: 'Listo',
+      statusAguardando: ['Esperando confirmación del pago', 'En cuanto lo confirmemos, tu pedido va a la cocina.'],
+      statusRecebido: ['¡Recibimos tu pedido!', 'El equipo ya fue avisado.'],
+      statusPreparando: ['Se está preparando', 'No debería tardar :)'],
+      statusPronto: ['¡Listo!', 'Puedes retirarlo o esperar en la mesa.']
+    }
+  };
+
+  let currentLang = 'pt';
+
+  function toggleLangMenu(event){
+    if(event) event.stopPropagation();
+    document.getElementById('langMenu').classList.toggle('open');
+  }
+
+  document.addEventListener('click', function(e){
+    const menu = document.getElementById('langMenu');
+    if(menu && menu.classList.contains('open') && !menu.contains(e.target)){
+      menu.classList.remove('open');
+    }
+  });
+
+  function applyStaticI18n(){
+    const dict = translations[currentLang];
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      const key = el.getAttribute('data-i18n');
+      if(dict[key] !== undefined) el.textContent = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el){
+      const key = el.getAttribute('data-i18n-placeholder');
+      if(dict[key] !== undefined) el.placeholder = dict[key];
+    });
+    document.querySelectorAll('.lang-option').forEach(function(el){
+      el.classList.toggle('active', el.getAttribute('data-lang') === currentLang);
+    });
+  }
+
+  function setLang(lang){
+    currentLang = lang;
+    applyStaticI18n();
+    document.getElementById('langMenu').classList.remove('open');
+    if(typeof updateCartBar === 'function') updateCartBar();
+    if(typeof renderMeusPedidos === 'function') renderMeusPedidos();
+    if(typeof renderMenu === 'function' && typeof menu !== 'undefined'){
+      renderMenu(menu.entradas, 'menuEntradas');
+      renderMenu(menu.principais, 'menuPrincipais');
+      renderMenu(menu.sobremesas, 'menuSobremesas');
+      renderMenu(menu.bebidas, 'menuBebidas');
+      renderMenu(menu.drinks, 'menuDrinks');
+    }
+  }
+
+  applyStaticI18n();
+
+  // Retorna o número da mesa informado pelo cliente.
+  function obterLocalPedido(){
+    const mesa = document.getElementById('mesaNumero').value.trim();
+    return mesa || '?';
+  }
+
+  // =====================================================================
+  // SITE 100% ILUSTRATIVO — não existe backend, banco de dados ou serviço
+  // externo de nenhum tipo aqui. Tudo (pedidos, reservas, estoque) vive
+  // só na memória do navegador enquanto a página está aberta: ao recarregar
+  // a página, tudo volta ao estado inicial. Isso é intencional: este é um
+  // projeto de portfólio, feito só para demonstrar a interface.
+  // =====================================================================
+
+  // ESTOQUE (itens marcados como esgotados pela equipe) — objeto fictício
+  // em memória. Formato: { "p1": true, "b7": true } → chave = id do item,
+  // true = esgotado.
+  let estoque = {};
+
+  function itemEsgotado(id){
+    return !!estoque[id];
+  }
+
+  // =====================================================================
+  // MODO DEMONSTRAÇÃO — mostra o painel da equipe com dados fictícios.
+  // Nada aqui é lido ou gravado em lugar nenhum: os pedidos/reservas/
+  // estoque abaixo vivem só na memória do navegador.
+  // =====================================================================
+  function pedidosFicticios(){
+    return [
+      { id:'demo1', mesa:'5', items:['2x Isca de frango', '2x Água de coco'], time:'19:42', total:64, status:'recebido', excluido:false },
+      { id:'demo2', mesa:'12', items:['1x Camarão empanado', '1x Caipirinha de morango'], time:'19:38', total:58, status:'preparando', excluido:false },
+      { id:'demo3', mesa:'3', items:['1x Batata frita', '2x Refrigerante lata'], time:'19:25', total:32, status:'pronto', excluido:false }
+    ];
+  }
+  function reservasFicticias(){
+    const hoje = new Date().toISOString().slice(0,10);
+    return [
+      { id:'demoR1', nome:'Camila Sousa', data:hoje, pessoas:'4', horario:'19:30', observacao:'Aniversário, se possível mesa perto da janela', excluido:false },
+      { id:'demoR2', nome:'Rafael Nunes', data:hoje, pessoas:'2', horario:'20:00', observacao:'', excluido:false }
+    ];
+  }
+  function abrirDemo(){
+    orders = pedidosFicticios();
+    reservations = reservasFicticias();
+    estoque = {};
+    document.getElementById('tabEquipe').classList.remove('hidden');
+    document.getElementById('tabReservas').classList.remove('hidden');
+    document.getElementById('tabEstoque').classList.remove('hidden');
+    document.getElementById('tabLixeira').classList.remove('hidden');
+    document.getElementById('demoBanner').classList.remove('hidden');
+    renderBoard();
+    renderReservas();
+    renderLixeira();
+    renderMenu(menu.entradas, 'menuEntradas');
+    renderMenu(menu.principais, 'menuPrincipais');
+    renderMenu(menu.sobremesas, 'menuSobremesas');
+    renderMenu(menu.bebidas, 'menuBebidas');
+    renderMenu(menu.drinks, 'menuDrinks');
+    switchTab('equipe');
+  }
+
+  // Botão "Sair da conta da equipe": encerra o modo demo, limpando os
+  // dados fictícios da memória.
+  function sairEquipe(){
+    orders = [];
+    reservations = [];
+    estoque = {};
+    document.getElementById('tabEquipe').classList.add('hidden');
+    document.getElementById('tabReservas').classList.add('hidden');
+    document.getElementById('tabEstoque').classList.add('hidden');
+    document.getElementById('tabLixeira').classList.add('hidden');
+    document.getElementById('demoBanner').classList.add('hidden');
+    renderMenu(menu.entradas, 'menuEntradas');
+    renderMenu(menu.principais, 'menuPrincipais');
+    renderMenu(menu.sobremesas, 'menuSobremesas');
+    renderMenu(menu.bebidas, 'menuBebidas');
+    renderMenu(menu.drinks, 'menuDrinks');
+    switchTab('cliente');
+  }
+
+  // =====================================================================
+  // CARDÁPIO / CARRINHO
+  // =====================================================================
+  const menu = {
+    entradas: [
+      {id:'e1', name:'Batata Frita com Cheddar e Bacon', price:42},
+    ],
+    principais: [
+      {id:'m1', name:'Risoto da Casa', price:89},
+      {id:'m2', name:'Seleção do Chef', price:120},
+      {id:'m3', name:'Filé ao Molho da Casa', price:95},
+      {id:'m4', name:'Prato Especial do Chef', price:110},
+      {id:'m5', name:'Talharim Negro aos Frutos do Mar', price:78},
+      {id:'m6', name:'Pizza de Calabresa', price:65},
+      {id:'m7', name:'Hambúrguer Artesanal', price:52},
+      {id:'m8', name:'Carne Grelhada', price:92},
+      {id:'m9', name:'Strogonoff', price:68},
+    ],
+    sobremesas: [
+      {id:'s1', name:'Bolo de Chocolate', price:28},
+      {id:'s2', name:'Bolo de Baunilha e Morango', price:26},
+      {id:'s3', name:'Sorvete na Taça', price:22},
+    ],
+    bebidas:[
+      {id:'b1', name:'Refrigerante Gelado', price:7},
+      {id:'b2', name:'Cerveja Gelada', price:12},
+    ],
+    drinks: [
+      {id:'d1', name:'Caipirinha de Limão', price:18},
+      {id:'d2', name:'Gin Tropical', price:28},
+    ]
+  };
+
+  // Tradução dos nomes dos itens do cardápio (a lista `menu` acima continua
+  // em português — é o nome "canônico" usado internamente/no pedido salvo
+  // para a equipe). Aqui só trocamos o que aparece na tela do cliente.
+  const itemNames = {
+    e1:  { en:'Loaded Fries with Cheddar and Bacon', es:'Papas Fritas con Cheddar y Bacon' },
+    m1:  { en:'House Risotto',                       es:'Risotto de la Casa' },
+    m2:  { en:"Chef's Selection",                    es:'Selección del Chef' },
+    m3:  { en:'Steak in House Sauce',                es:'Bife en Salsa de la Casa' },
+    m4:  { en:"Chef's Special Plate",                es:'Plato Especial del Chef' },
+    m5:  { en:'Squid Ink Seafood Pasta',             es:'Pasta Negra con Mariscos' },
+    m6:  { en:'Pepperoni Pizza',                     es:'Pizza de Calabresa' },
+    m7:  { en:'Artisan Burger',                      es:'Hamburguesa Artesanal' },
+    m8:  { en:'Grilled Beef',                        es:'Carne a la Parrilla' },
+    m9:  { en:'Beef Stroganoff',                     es:'Strogonoff de Carne' },
+    s1:  { en:'Chocolate Cake',                      es:'Pastel de Chocolate' },
+    s2:  { en:'Vanilla & Strawberry Cake',           es:'Pastel de Vainilla y Fresa' },
+    s3:  { en:'Ice Cream Cup',                       es:'Copa de Helado' },
+    b1:  { en:'Cold Soda',                           es:'Refresco Helado' },
+    b2:  { en:'Cold Beer',                           es:'Cerveza Helada' },
+    d1:  { en:'Lime Caipirinha',                     es:'Caipiriña de Limón' },
+    d2:  { en:'Tropical Gin',                        es:'Gin Tropical' },
+  };
+
+  function translatedItemName(id, nomeOriginal){
+    if(currentLang === 'pt') return nomeOriginal;
+    return (itemNames[id] && itemNames[id][currentLang]) || nomeOriginal;
+  }
+
+  function formatarDataHora(data){
+    const dataStr = data.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'});
+    const horaStr = data.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+    return `${dataStr} · ${horaStr}`;
+  }
+
+  let cart = {};
+  let orders = [];
+  let reservations = [];
+
+  function renderMenu(list, containerId){
+    const el = document.getElementById(containerId);
+    const d = translations[currentLang];
+    el.innerHTML = list.map(item => {
+      const esgotado = itemEsgotado(item.id);
+      const qty = cart[item.id]?.qty || 0;
+      return `
+      <div class="menu-item${esgotado ? ' esgotado' : ''}${qty > 0 ? ' in-cart' : ''}">
+        <div>
+          <div class="item-name">${translatedItemName(item.id, item.name)}</div>
+          ${esgotado
+            ? `<div class="item-esgotado-tag">${d.esgotado || 'Esgotado'}</div>`
+            : `<div class="item-price">R$ ${item.price}</div>`}
+        </div>
+        ${esgotado ? '' : `
+        <div class="qty-control">
+          <div class="qty-btn" onclick="changeQty('${item.id}', -1)">−</div>
+          <div class="qty-num" id="qty-${item.id}">${qty}</div>
+          <div class="qty-btn" onclick="changeQty('${item.id}', 1)">+</div>
+        </div>`}
+      </div>
+    `;
+    }).join('');
+  }
+
+  function allItems(){
+    return [...menu.entradas, ...menu.principais, ...menu.sobremesas, ...menu.bebidas, ...menu.drinks];
+  }
+
+  function changeQty(id, delta){
+    if(delta > 0 && itemEsgotado(id)) return; // item esgotado, não deixa adicionar
+    const item = allItems().find(i => i.id === id);
+    if(!cart[id]) cart[id] = {qty:0, name:item.name, price:item.price};
+    cart[id].qty = Math.max(0, cart[id].qty + delta);
+    if(cart[id].qty === 0) delete cart[id];
+    renderMenuContaining(id);
+    updateCartBar();
+  }
+
+  // Re-renderiza só a lista do cardápio que contém esse item (entradas,
+  // pastéis, etc.) — necessário porque o card muda de aparência (borda,
+  // selo de quantidade) conforme entra/sai do carrinho.
+  function renderMenuContaining(id){
+    const listas = [
+      [menu.entradas, 'menuEntradas'],
+      [menu.principais, 'menuPrincipais'],
+      [menu.sobremesas, 'menuSobremesas'],
+      [menu.bebidas, 'menuBebidas'],
+      [menu.drinks, 'menuDrinks'],
+    ];
+    const alvo = listas.find(([lista]) => lista.some(item => item.id === id));
+    if(alvo) renderMenu(alvo[0], alvo[1]);
+  }
+
+  function updateCartBar(){
+    const ids = Object.keys(cart);
+    const totalQty = ids.reduce((s,id) => s + cart[id].qty, 0);
+    const totalPrice = ids.reduce((s,id) => s + cart[id].qty * cart[id].price, 0);
+    const floatingCart = document.getElementById('floatingCart');
+    document.getElementById('floatingCartCount').textContent = totalQty;
+    document.getElementById('floatingCartTotal').textContent = `R$ ${totalPrice}`;
+    floatingCart.classList.toggle('show', totalQty > 0);
+  }
+
+  function cartTotal(){
+    return Object.values(cart).reduce((s, it) => s + it.qty * it.price, 0);
+  }
+
+  function openCart(){
+    const ids = Object.keys(cart);
+    if(ids.length === 0){
+      alert('Seu carrinho está vazio. Toque no "+" ao lado de um item do cardápio pra adicionar.');
+      return;
+    }
+    const modalItems = document.getElementById('modalItems');
+    let total = 0;
+    modalItems.innerHTML = ids.map(id => {
+      const it = cart[id];
+      total += it.qty * it.price;
+      return `<div class="modal-row"><span>${it.qty}x ${translatedItemName(id, it.name)}</span><span>R$ ${it.qty * it.price}</span></div>`;
+    }).join('');
+    document.getElementById('modalTotalValue').textContent = 'R$ ' + total;
+    document.getElementById('cartaoErro').style.display = 'none';
+    document.getElementById('pedidoCarregando').style.display = 'none';
+    document.getElementById('btnConfirmarPedido').style.display = 'block';
+    document.getElementById('modalBg').classList.add('show');
+  }
+
+  function closeCart(){
+    document.getElementById('modalBg').classList.remove('show');
+  }
+
+  // =====================================================================
+  // Confirma o pedido depois do aviso de "site fictício". Não existe
+  // cobrança real nenhuma, nem nada sendo enviado pra fora do navegador —
+  // o pedido é só adicionado à lista local (`orders`) já como "recebido",
+  // e aparece normalmente no painel ilustrativo da equipe.
+  // =====================================================================
+  function confirmarPedidoFicticio(){
+    const mesa = obterLocalPedido();
+    const items = Object.values(cart).map(it => `${it.qty}x ${it.name}`);
+    if(items.length === 0) return;
+
+    document.getElementById('btnConfirmarPedido').style.display = 'none';
+    document.getElementById('cartaoErro').style.display = 'none';
+    document.getElementById('pedidoCarregando').style.display = 'block';
+
+    // pequeno delay só pra simular visualmente o "enviando pedido..."
+    setTimeout(() => {
+      const novoPedido = {
+        id: 'pedido-' + Date.now(),
+        mesa: mesa,
+        items: items,
+        total: cartTotal(),
+        status: 'recebido',
+        paymentStatus: 'simulado_ficticio',
+        time: formatarDataHora(new Date())
+      };
+      orders.push(novoPedido);
+
+      cart = {};
+      renderMenu(menu.entradas, 'menuEntradas');
+      renderMenu(menu.principais, 'menuPrincipais');
+      renderMenu(menu.sobremesas, 'menuSobremesas');
+      renderMenu(menu.bebidas, 'menuBebidas');
+      renderMenu(menu.drinks, 'menuDrinks');
+      updateCartBar();
+      closeCart();
+      adicionarMeuPedido(novoPedido.id);
+
+      // Assim que o pedido é confirmado, já mostramos ele caindo
+      // direto no painel da equipe (fluxo de demonstração).
+      document.getElementById('tabEquipe').classList.remove('hidden');
+      renderBoard();
+      switchTab('equipe');
+    }, 500);
+  }
+
+  // ===== EQUIPE: avança status do pedido (só em memória) =====
+  // "Excluir" aqui é reversível: o pedido vai pra Lixeira (fica marcado
+  // como excluído, some das colunas normais) e pode ser restaurado
+  // enquanto a página estiver aberta.
+  function excluirPedido(id, event){
+    if(event) event.stopPropagation();
+    if(confirm('Mover este pedido para a lixeira? Dá pra restaurar depois, na aba Lixeira.')){
+      const o = orders.find(o => o.id === id);
+      if(o){ o.excluido = true; o.excluidoEm = new Date(); }
+      renderBoard(); renderLixeira(); renderMeusPedidos();
+    }
+  }
+
+  function restaurarPedido(id, event){
+    if(event) event.stopPropagation();
+    const o = orders.find(o => o.id === id);
+    if(o){ o.excluido = false; delete o.excluidoEm; }
+    renderBoard(); renderLixeira(); renderMeusPedidos();
+  }
+
+  function excluirPedidoDefinitivo(id, event){
+    if(event) event.stopPropagation();
+    if(confirm('Apagar este pedido de vez? Essa ação não pode ser desfeita.')){
+      orders = orders.filter(o => o.id !== id);
+      renderBoard(); renderLixeira(); renderMeusPedidos();
+    }
+  }
+
+  function advanceStatus(id){
+    const order = orders.find(o => o.id === id);
+    if(!order) return;
+    if(order.status === 'recebido') order.status = 'preparando';
+    else if(order.status === 'preparando') order.status = 'pronto';
+    renderBoard();
+    renderMeusPedidos();
+  }
+
+  // Confirmação (fictícia) de que o pagamento foi recebido.
+  function confirmarPagamento(id){
+    const o = orders.find(o => o.id === id);
+    if(o){ o.status = 'recebido'; o.paymentStatus = 'aprovado'; }
+    renderBoard();
+    renderMeusPedidos();
+  }
+
+  function renderBoard(){
+    const cols = {recebido: [], preparando: [], pronto: []};
+    const pendentes = [];
+    orders.forEach(o => {
+      if(o.excluido) return;
+      if(o.status === 'aguardando_pagamento') pendentes.push(o);
+      else if(cols[o.status]) cols[o.status].push(o);
+    });
+
+    const nextLabel = {recebido:'Iniciar preparo', preparando:'Marcar como pronto'};
+
+    const metodoLabel = {
+      pix: '💠 Pix',
+      credito: '💳 Crédito (Mercado Pago)',
+      debito: '💳 Débito (Mercado Pago)',
+    };
+    const statusPagLabel = {
+      aguardando_confirmacao: 'confirmar recebimento',
+      aguardando_pagamento: 'aguardando pagamento',
+      pagar_na_retirada: 'cobrar na entrega',
+      aprovado: 'pago ✓',
+      simulado_ficticio: 'pagamento fictício (site de demonstração)'
+    };
+
+    function cardHtml(o){
+      const btn = o.status === 'pronto'
+        ? `<div class="status-btn done">Pronto</div>`
+        : `<div class="status-btn next" onclick="advanceStatus('${o.id}')">${nextLabel[o.status]}</div>`;
+      const pagamentoInfo = o.paymentMethod
+        ? `<div class="order-items" style="margin-bottom:4px;"><strong>${metodoLabel[o.paymentMethod] || o.paymentMethod}</strong>${statusPagLabel[o.paymentStatus] ? ' · ' + statusPagLabel[o.paymentStatus] : ''}${o.telefone ? ' · 📱 ' + o.telefone : ''}</div>`
+        : '';
+      return `
+        <div class="order-card ${o.status}">
+          <div class="order-top">
+            <div class="order-mesa">Mesa ${o.mesa}</div>
+            <div class="order-time">${o.time || ''}</div>
+          </div>
+          ${pagamentoInfo}
+          <div class="order-items">${o.items.join(', ')}</div>
+          <div class="order-actions">
+            ${btn}
+            <div class="trash-btn" onclick="excluirPedido('${o.id}', event)" title="Remover pedido">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/><path d="M10 11v6M14 11v6"/></svg>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function cardHtmlPendente(o){
+      const pagamentoInfo = o.paymentMethod
+        ? `<div class="order-items" style="margin-bottom:4px;"><strong>${metodoLabel[o.paymentMethod] || o.paymentMethod}</strong>${o.telefone ? ' · 📱 ' + o.telefone : ''}</div>`
+        : '';
+      return `
+        <div class="order-card aguardando_pagamento">
+          <div class="order-top">
+            <div class="order-mesa">Mesa ${o.mesa}</div>
+            <div class="order-time">${o.time || ''}</div>
+          </div>
+          ${pagamentoInfo}
+          <div class="order-items">${o.items.join(', ')} · <strong>Total R$ ${o.total}</strong></div>
+          <div class="order-actions">
+            <div class="status-btn next" onclick="confirmarPagamento('${o.id}')">Confirmar pagamento recebido</div>
+            <div class="trash-btn" onclick="excluirPedido('${o.id}', event)" title="Remover pedido">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/><path d="M10 11v6M14 11v6"/></svg>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    const secaoPendente = document.getElementById('secaoPagamentoPendente');
+    secaoPendente.style.display = pendentes.length ? 'block' : 'none';
+    document.getElementById('colPagamentoPendente').innerHTML = pendentes.map(cardHtmlPendente).join('');
+
+    document.getElementById('colRecebido').innerHTML = cols.recebido.length ? cols.recebido.map(cardHtml).join('') : '<div class="empty-msg">Nenhum pedido novo</div>';
+    document.getElementById('colPreparando').innerHTML = cols.preparando.length ? cols.preparando.map(cardHtml).join('') : '<div class="empty-msg">Nada em preparo</div>';
+    document.getElementById('colPronto').innerHTML = cols.pronto.length ? cols.pronto.map(cardHtml).join('') : '<div class="empty-msg">Nada pronto ainda</div>';
+  }
+
+  // ===== EQUIPE: reservas =====
+  function excluirReserva(id, event){
+    if(event) event.stopPropagation();
+    if(confirm('Mover esta reserva para a lixeira? Dá pra restaurar depois, na aba Lixeira.')){
+      const r = reservations.find(r => r.id === id);
+      if(r){ r.excluido = true; r.excluidoEm = new Date(); }
+      renderReservas(); renderLixeira();
+    }
+  }
+
+  function restaurarReserva(id, event){
+    if(event) event.stopPropagation();
+    const r = reservations.find(r => r.id === id);
+    if(r){ r.excluido = false; delete r.excluidoEm; }
+    renderReservas(); renderLixeira();
+  }
+
+  function excluirReservaDefinitivo(id, event){
+    if(event) event.stopPropagation();
+    if(confirm('Apagar esta reserva de vez? Essa ação não pode ser desfeita.')){
+      reservations = reservations.filter(r => r.id !== id);
+      renderReservas(); renderLixeira();
+    }
+  }
+
+  function formatarDataReserva(dataStr){
+    if(!dataStr) return '';
+    const [ano, mes, dia] = dataStr.split('-');
+    return `${dia}/${mes}/${ano}`;
+  }
+
+  function renderReservas(){
+    const lista = document.getElementById('listaReservas');
+    const ativas = reservations.filter(r => !r.excluido);
+    if(ativas.length === 0){
+      lista.innerHTML = '<div class="empty-msg">Nenhuma reserva ainda</div>';
+      return;
+    }
+
+    lista.innerHTML = ativas.map(r => {
+      return `
+        <div class="reserva-card">
+          <div class="reserva-nome">${r.nome || 'Sem nome informado'}</div>
+          <div class="reserva-top">
+            <div class="reserva-data">${formatarDataReserva(r.data)}</div>
+            <div class="reserva-horario">${r.horario || ''}</div>
+          </div>
+          <div class="reserva-info">
+            ${r.pessoas || ''}${r.observacao ? ' · ' + r.observacao : ''}
+          </div>
+          <div class="order-actions">
+            <div class="trash-btn" onclick="excluirReserva('${r.id}', event)" title="Remover reserva">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/><path d="M10 11v6M14 11v6"/></svg>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ===== EQUIPE: Lixeira (pedidos e reservas excluídos, com restauração) =====
+  // Como tudo vive só na memória do navegador, a lixeira dura enquanto a
+  // página estiver aberta — ao recarregar, volta ao estado inicial.
+  function formatarDataHoraExcluido(data){
+    if(!data) return '';
+    return data.toLocaleDateString('pt-BR') + ' às ' + data.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+  }
+
+  function renderLixeira(){
+    const elPedidos = document.getElementById('listaLixeiraPedidos');
+    const elReservas = document.getElementById('listaLixeiraReservas');
+    if(!elPedidos || !elReservas) return;
+
+    const pedidosExcluidos = orders.filter(o => o.excluido);
+    const reservasExcluidas = reservations.filter(r => r.excluido);
+
+    elPedidos.innerHTML = pedidosExcluidos.length ? pedidosExcluidos.map(o => `
+      <div class="order-card">
+        <div class="order-top">
+          <div class="order-mesa">Mesa ${o.mesa || '-'}</div>
+          <div class="order-time">${o.time || ''}</div>
+        </div>
+        <div class="order-items">${(o.items || []).join(', ')}</div>
+        <div class="item-price" style="margin-top:4px;">Apagado em: ${formatarDataHoraExcluido(o.excluidoEm)}</div>
+        <div class="order-actions">
+          <div class="status-btn next" onclick="restaurarPedido('${o.id}', event)">Restaurar</div>
+          <div class="trash-btn" onclick="excluirPedidoDefinitivo('${o.id}', event)" title="Apagar de vez">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/><path d="M10 11v6M14 11v6"/></svg>
+          </div>
+        </div>
+      </div>
+    `).join('') : '<div class="empty-msg">Lixeira de pedidos vazia</div>';
+
+    elReservas.innerHTML = reservasExcluidas.length ? reservasExcluidas.map(r => `
+      <div class="reserva-card">
+        <div class="reserva-nome">${r.nome || 'Sem nome informado'}</div>
+        <div class="reserva-top">
+          <div class="reserva-data">${formatarDataReserva(r.data)}</div>
+          <div class="reserva-horario">${r.horario || ''}</div>
+        </div>
+        <div class="reserva-info">${r.pessoas || ''}${r.observacao ? ' · ' + r.observacao : ''}</div>
+        <div class="item-price" style="margin-top:4px;">Apagada em: ${formatarDataHoraExcluido(r.excluidoEm)}</div>
+        <div class="order-actions">
+          <div class="status-btn next" onclick="restaurarReserva('${r.id}', event)">Restaurar</div>
+          <div class="trash-btn" onclick="excluirReservaDefinitivo('${r.id}', event)" title="Apagar de vez">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/><path d="M10 11v6M14 11v6"/></svg>
+          </div>
+        </div>
+      </div>
+    `).join('') : '<div class="empty-msg">Lixeira de reservas vazia</div>';
+  }
+
+  // Lista dos pedidos feitos pelo próprio visitante nesta sessão. Não é
+  // salva em nenhum lugar (nem localStorage): some ao recarregar a página,
+  // já que aqui é tudo ilustrativo e vive só na memória do navegador.
+  let meusPedidosIds = [];
+
+  function adicionarMeuPedido(id){
+    if(meusPedidosIds.includes(id)) return;
+    meusPedidosIds.unshift(id);
+    renderMeusPedidos();
+  }
+
+  function removerMeuPedidoLocal(id){
+    meusPedidosIds = meusPedidosIds.filter(pid => pid !== id);
+    renderMeusPedidos();
+  }
+
+  function statusPedidoLabelAtual(){
+    const d = translations[currentLang];
+    return {
+      aguardando_pagamento: d.statusAguardando,
+      recebido: d.statusRecebido,
+      preparando: d.statusPreparando,
+      pronto: d.statusPronto
+    };
+  }
+
+  function stepsHtml(status){
+    const d = translations[currentLang];
+    const ordem = ['recebido', 'preparando', 'pronto'];
+    const atual = ordem.indexOf(status);
+    function stepClass(idx){
+      if(atual < 0) return '';
+      if(idx < atual) return 'done';
+      if(idx === atual) return 'current';
+      return '';
+    }
+    function lineClass(threshold){
+      return atual >= threshold ? 'done' : '';
+    }
+    return `
+      <div class="track-steps">
+        <div class="track-step ${stepClass(0)}"><div class="circle">1</div><div class="label">${d.stepRecebido}</div></div>
+        <div class="track-line ${lineClass(1)}"></div>
+        <div class="track-step ${stepClass(1)}"><div class="circle">2</div><div class="label">${d.stepPreparando}</div></div>
+        <div class="track-line ${lineClass(2)}"></div>
+        <div class="track-step ${stepClass(2)}"><div class="circle">3</div><div class="label">${d.stepPronto}</div></div>
+      </div>
+    `;
+  }
+
+  function renderMeusPedidos(){
+    const d = translations[currentLang];
+    const container = document.getElementById('listaMeusPedidos');
+    if(meusPedidosIds.length === 0){
+      container.innerHTML = `<div class="empty-msg" style="padding:20px 4px;">${d.semPedidos}</div>`;
+      return;
+    }
+
+    const statusLabel = statusPedidoLabelAtual();
+    container.innerHTML = meusPedidosIds.map(id => {
+      const pedido = orders.find(o => o.id === id);
+      if(!pedido){
+        return `<div class="order-card"><div class="empty-msg">${d.carregando}</div></div>`;
+      }
+      const [msg, sub] = statusLabel[pedido.status] || statusLabel.aguardando_pagamento;
+      return `
+        <div class="order-card">
+          <div class="order-top">
+            <div class="order-mesa">${d.localMesa} ${pedido.mesa || '-'}</div>
+            <div class="order-time">${pedido.time || ''}</div>
+          </div>
+          ${stepsHtml(pedido.status)}
+          <div class="track-msg" style="margin-top:2px;">${msg}</div>
+          <div class="track-sub">${sub}</div>
+          <div class="track-items">${(pedido.items || []).join(', ')}</div>
+          <div class="pay-back" onclick="removerMeuPedidoLocal('${id}')">${d.removerLista}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  renderMeusPedidos();
+
+  function switchTab(tab){
+    document.getElementById('viewCliente').classList.toggle('active', tab === 'cliente');
+    document.getElementById('viewMeusPedidos').classList.toggle('active', tab === 'meusPedidos');
+    document.getElementById('viewEquipe').classList.toggle('active', tab === 'equipe');
+    document.getElementById('viewReservas').classList.toggle('active', tab === 'reservas');
+    document.getElementById('viewEstoque').classList.toggle('active', tab === 'estoque');
+    document.getElementById('viewLixeira').classList.toggle('active', tab === 'lixeira');
+    document.getElementById('tabCliente').classList.toggle('active', tab === 'cliente');
+    document.getElementById('tabMeusPedidos').classList.toggle('active', tab === 'meusPedidos');
+    document.getElementById('tabCardapio').classList.toggle('active', tab === 'cliente');
+    document.getElementById('tabSeusPedidosPhone').classList.toggle('active', tab === 'meusPedidos');
+    document.getElementById('tabEquipe').classList.toggle('active', tab === 'equipe');
+    document.getElementById('tabReservas').classList.toggle('active', tab === 'reservas');
+    document.getElementById('tabEstoque').classList.toggle('active', tab === 'estoque');
+    document.getElementById('tabLixeira').classList.toggle('active', tab === 'lixeira');
+    if(tab === 'estoque') renderEstoqueEquipe();
+    if(tab === 'lixeira') renderLixeira();
+  }
+
+  // ===== EQUIPE: estoque (itens em falta) — só em memória =====
+  function toggleEstoque(id){
+    estoque[id] = !estoque[id];
+    renderEstoqueEquipe();
+    renderMenu(menu.entradas, 'menuEntradas');
+    renderMenu(menu.principais, 'menuPrincipais');
+    renderMenu(menu.sobremesas, 'menuSobremesas');
+    renderMenu(menu.bebidas, 'menuBebidas');
+    renderMenu(menu.drinks, 'menuDrinks');
+  }
+
+  function renderEstoqueEquipe(){
+    const el = document.getElementById('listaEstoque');
+    if(!el) return;
+    const categorias = [
+      ['Entradas', menu.entradas],
+      ['Pratos Principais', menu.principais],
+      ['Sobremesas', menu.sobremesas],
+      ['Bebidas', menu.bebidas],
+      ['Drinks', menu.drinks],
+    ];
+    el.innerHTML = categorias.map(([titulo, lista]) => `
+      <div class="cat-title">${titulo}</div>
+      ${lista.map(item => {
+        const off = itemEsgotado(item.id);
+        return `
+        <div class="estoque-item" onclick="toggleEstoque('${item.id}')">
+          <div class="item-name">${item.name}</div>
+          <div class="estoque-toggle${off ? ' off' : ''}"><div class="knob"></div></div>
+        </div>`;
+      }).join('')}
+    `).join('');
+  }
+
+  renderMenu(menu.entradas, 'menuEntradas');
+  renderMenu(menu.principais, 'menuPrincipais');
+  renderMenu(menu.sobremesas, 'menuSobremesas');
+  renderMenu(menu.bebidas, 'menuBebidas');
+  renderMenu(menu.drinks, 'menuDrinks');
+</script>
+
+</body>
+</html>
