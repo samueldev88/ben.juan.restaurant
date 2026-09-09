@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Reserva — Ben Juan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <link href="style.css" rel="stylesheet">
 
@@ -27,6 +27,75 @@
     align-items:center;
     overflow-x:hidden;
   }
+
+  /* A navbar é filha direta do body (flex column com align-items:center),
+     então por padrão ela encolhe pro tamanho do próprio conteúdo em vez
+     de ocupar a largura toda. Forçamos 100% aqui pra ela esticar
+     de ponta a ponta, como no pedidos.html. */
+  header{
+    width: 100%;
+  }
+
+  /* O style.css compartilhado limita a largura/o container da .navbar
+     pensando no layout largo do site normal. Aqui sobrescrevemos pra
+     garantir que a navbar sempre encoste nas duas bordas da tela,
+     mesmo dentro da largura estreita da página de reserva. */
+  header .navbar{
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+  header .navbar .container-fluid{
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  /* ---------- Dropdown de idiomas da navbar (igual ao pedidos.html) ---------- */
+  .icon-btn{
+    width:34px; height:34px;
+    border-radius:50%;
+    background: rgba(255,255,255,0.12);
+    color: var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    text-decoration:none;
+    border:none;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .icon-btn svg{ width:16px; height:16px; }
+  .lang-switch{ position:relative; }
+  .lang-switch .icon-btn{ background: var(--coral); color:#fff; }
+  .lang-menu{
+    display:none;
+    position:absolute;
+    top: calc(100% + 8px);
+    right:0;
+    background: var(--card);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    padding: 6px;
+    z-index: 50;
+    min-width: 150px;
+  }
+  .lang-menu.open{ display:block; }
+  .lang-option{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    font-family:'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight:600;
+    color: var(--ink);
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .lang-option:hover{ background: rgba(255,255,255,0.06); }
+  .lang-option.active{ background: var(--navy); color: var(--navy-deep); }
 
   .phone{
     width:100%;
@@ -171,6 +240,10 @@
   .avatar img{
     width:100%; height:100%;
     object-fit:cover;
+  }
+  .avatar svg{
+    width:100%; height:100%;
+    display:block;
   }
 
   .venue-info{
@@ -481,6 +554,16 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html">Ben Juan Restaurant</a>
+            <div class="lang-switch navbar-lang ms-auto me-2">
+              <button class="icon-btn" onclick="toggleNavLangMenu(event)" title="Idiomas / Languages" aria-label="Idiomas">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+              </button>
+              <div class="lang-menu" id="navLangMenu">
+                <div class="lang-option active" data-lang="pt" data-label="🇧🇷 PT" onclick="setNavLang('pt', this)">🇧🇷 Português</div>
+                <div class="lang-option" data-lang="en" data-label="🇺🇸 EN" onclick="setNavLang('en', this)">🇺🇸 English</div>
+                <div class="lang-option" data-lang="es" data-label="🇪🇸 ES" onclick="setNavLang('es', this)">🇪🇸 Español</div>
+              </div>
+            </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -496,10 +579,10 @@
                         <a class="nav-link" href="index.html#contato">Contato</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="pedidos.html">Pedidos</a>
+                        <a class="nav-link" href="pedidos.html">Fazer Pedido</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="reserva.html">Reservas</a>
+                        <a class="nav-link active" href="reserva.html">Reservas</a>
                     </li>
                 </ul>
             </div>
@@ -509,26 +592,27 @@
 
 <div class="phone">
 
-  <div class="lang-bar">
-    <div class="nav-dropdown" id="langDropdown">
-      <button class="nav-dropdown-toggle" id="langToggle" type="button">
-        <span id="langCurrent">🇧🇷 PT</span> <span class="chevron">▾</span>
-      </button>
-      <div class="dropdown-menu" id="langMenu">
-        <button class="lang-option active" data-lang="pt" data-label="🇧🇷 PT">🇧🇷 Português</button>
-        <button class="lang-option" data-lang="es" data-label="🇪🇸 ES">🇪🇸 Español</button>
-        <button class="lang-option" data-lang="en" data-label="🇺🇸 EN">🇺🇸 English</button>
-      </div>
-    </div>
-  </div>
-
   <div class="hero">
-    <img src="assets/images/quiosque-foto.jpg" alt="Ben Juan">
+    <img src="https://guiaviajarmelhor.com.br/wp-content/uploads/2023/10/restaurantes-chiques-em-sao-paulo.jpeg" alt="Ben Juan Restaurant">
   </div>
 
   <div class="avatar-wrap">
     <div class="avatar">
-      <img src="assets/images/logo.png" alt="Ben Juan">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ben Juan Restaurant">
+        <!-- selo -->
+        <circle cx="100" cy="100" r="97" style="fill:var(--cream); stroke:var(--coral); stroke-width:3"/>
+        <circle cx="100" cy="100" r="87" style="fill:none; stroke:var(--navy-deep); stroke-width:1; opacity:0.22"/>
+
+        <!-- monograma entrelaçado, serifado e itálico -->
+        <text x="100" y="98" text-anchor="middle" font-family="'Playfair Display', serif" font-style="italic" font-weight="700" font-size="60" style="fill:var(--navy-deep)">B<tspan style="fill:var(--coral)">J</tspan></text>
+
+        <!-- filete dourado -->
+        <line x1="64" y1="112" x2="136" y2="112" style="stroke:var(--sand); stroke-width:1.4"/>
+
+        <!-- ondas em duas camadas, remetendo à praia do Recreio -->
+        <path d="M46 132 Q73 120 100 132 T154 132" style="fill:none; stroke:var(--coral); stroke-width:2.6; stroke-linecap:round"/>
+        <path d="M40 144 Q73 130 106 144 T166 144" style="fill:none; stroke:var(--navy); stroke-width:1.8; stroke-linecap:round; opacity:0.5"/>
+      </svg>
     </div>
   </div>
 
@@ -797,29 +881,24 @@
     aplicarHorariosOcupados();
   }
 
-  /* ---------- Navbar de idiomas ---------- */
-  const langDropdown = document.getElementById('langDropdown');
-  const langToggle = document.getElementById('langToggle');
-  const langMenu = document.getElementById('langMenu');
-  const langCurrent = document.getElementById('langCurrent');
+  /* ---------- Dropdown de idiomas (navbar) ---------- */
+  function toggleNavLangMenu(event){
+    if(event) event.stopPropagation();
+    document.getElementById('navLangMenu').classList.toggle('open');
+  }
 
-  langToggle.addEventListener('click', function(e){
-    e.stopPropagation();
-    langDropdown.classList.toggle('open');
-  });
+  function setNavLang(lang, el){
+    document.querySelectorAll('#navLangMenu .lang-option').forEach(o => o.classList.remove('active'));
+    if(el) el.classList.add('active');
+    document.getElementById('navLangMenu').classList.remove('open');
+    applyLanguage(lang);
+  }
 
-  document.querySelectorAll('.lang-option').forEach(function(opt){
-    opt.addEventListener('click', function(){
-      document.querySelectorAll('.lang-option').forEach(o => o.classList.remove('active'));
-      this.classList.add('active');
-      langCurrent.textContent = this.dataset.label;
-      langDropdown.classList.remove('open');
-      applyLanguage(this.dataset.lang);
-    });
-  });
-
-  document.addEventListener('click', function(){
-    langDropdown.classList.remove('open');
+  document.addEventListener('click', function(e){
+    const menu = document.getElementById('navLangMenu');
+    if(menu && menu.classList.contains('open') && !menu.contains(e.target)){
+      menu.classList.remove('open');
+    }
   });
 
   /* ---------- Campo de nome completo ---------- */
