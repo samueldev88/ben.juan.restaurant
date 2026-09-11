@@ -13,6 +13,11 @@
     <style>
       /* :root (paleta) e .navbar agora vêm de style.css */
 
+      html{
+        scroll-behavior: smooth;
+        scroll-padding-top: 84px;
+      }
+
       *{ box-sizing:border-box; }
 
       body{
@@ -36,6 +41,42 @@
         background: var(--amber);
         color: var(--navy-deep) !important;
         transform: translateY(-1px);
+      }
+      .btn-order-hero{
+        display: inline-block;
+        margin-top: 22px;
+        padding: 12px 30px !important;
+        font-size: 14.5px;
+      }
+
+      /* ---------- Navbar fixa ---------- */
+      header{
+        position: sticky;
+        top: 0;
+        z-index: 1030;
+        transition: box-shadow .2s ease;
+      }
+      header.is-scrolled{
+        box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+      }
+
+      /* ---------- Ajustes de layout da navbar ---------- */
+      .navbar > .container-fluid{
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 8px;
+      }
+      .navbar-brand{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
+      }
+      .navbar-lang{
+        flex-shrink: 0;
+      }
+      .navbar-toggler{
+        flex-shrink: 0;
       }
 
       /* ---------- Dropdown de idiomas da navbar (igual ao pedidos.html / reserva.html) ---------- */
@@ -305,7 +346,7 @@
           padding-top: 10px;
         }
         .navbar-nav .nav-link{
-          padding: 10px 4px !important;
+          padding: 12px 6px !important;
         }
       }
 
@@ -386,10 +427,6 @@
           font-size: 11px;
           padding: 6px 10px !important;
         }
-        .navbar > .container-fluid{
-          flex-wrap: nowrap;
-          gap: 6px;
-        }
         .row.g-4 > [class*="col-"]{
           flex: 0 0 100%;
           max-width: 100%;
@@ -404,8 +441,7 @@
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">Ben Juan Restaurant</a>
-                <a class="btn-order ms-auto me-2" href="pedidos.html" data-i18n="btnOrder">Peça Aqui</a>
-                <div class="lang-switch navbar-lang me-2">
+                <div class="lang-switch navbar-lang ms-auto me-2">
                   <button class="icon-btn" onclick="toggleNavLangMenu(event)" title="Idiomas / Languages" aria-label="Idiomas">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
                   </button>
@@ -469,6 +505,7 @@
                     <div class="eyebrow" data-i18n="eyebrowCardapio">Nosso Cardápio</div>
                     <h2 data-i18n="menuTitle">Pratos preparados com cuidado</h2>
                     <p data-i18n="menuSub">Uma seleção da nossa cozinha, pensada pra quem aprecia uma boa mesa.</p>
+                    <a class="btn-order btn-order-hero" href="pedidos.html" data-i18n="btnOrder">Peça Aqui</a>
                 </div>
 
                 <!-- ENTRADAS -->
@@ -844,6 +881,16 @@
           menu.classList.remove('open');
         }
       });
+
+      (function(){
+        const header = document.querySelector('header');
+        if(!header) return;
+        function updateHeaderShadow(){
+          header.classList.toggle('is-scrolled', window.scrollY > 8);
+        }
+        window.addEventListener('scroll', updateHeaderShadow, { passive: true });
+        updateHeaderShadow();
+      })();
     </script>
 </body>
 </html>
