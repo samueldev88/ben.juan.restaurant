@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -8,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
+    <link href="{% static 'restaurante/css/style.css' %}" rel="stylesheet">
 
     <style>
       /* :root (paleta) e .navbar agora vêm de style.css */
@@ -68,15 +69,30 @@
       }
       .navbar-brand{
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
         min-width: 0;
+      }
+      .navbar-brand .brand-full{
+        display: none;
+      }
+      .navbar-brand .brand-short{
+        display: inline;
+      }
+      @media (min-width: 992px){
+        .navbar-brand .brand-full{
+          display: inline;
+        }
+        .navbar-brand .brand-short{
+          display: none;
+        }
       }
       .navbar-lang{
         flex-shrink: 0;
       }
       .navbar-toggler{
         flex-shrink: 0;
+      }
+      .mobile-menu-backdrop{
+        display: none;
       }
 
       /* ---------- Dropdown de idiomas da navbar (igual ao pedidos.html / reserva.html) ---------- */
@@ -93,6 +109,20 @@
       }
       .icon-btn svg{ width:16px; height:16px; }
       .lang-switch{ position:relative; }
+      .lang-row-trigger{
+        display: flex;
+        align-items: center;
+        gap: 0;
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+      }
+      .lang-row-label{ display: none; }
+      .lang-row-chevron{
+        display: none;
+        transition: transform .2s ease;
+      }
       .lang-menu{
         display:none;
         position:absolute;
@@ -121,6 +151,205 @@
       }
       .lang-option:hover{ background: rgba(255,255,255,0.06); }
       .lang-option.active{ background: var(--navy); color: var(--navy-deep); }
+
+      /* ---------- Globo dourado ---------- */
+      .icon-btn-gold{
+        background: var(--navy);
+        color: var(--navy-deep);
+      }
+
+      /* ---------- Links rápidos no topo (mobile) ---------- */
+      .mobile-quicklinks{
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+        margin-right: 10px;
+      }
+      .quick-link{
+        font-family: 'Poppins', sans-serif;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--navy);
+        border: 1px solid var(--navy);
+        border-radius: 999px;
+        padding: 7px 13px;
+        white-space: nowrap;
+        text-decoration: none;
+        transition: background .15s ease, color .15s ease;
+      }
+      .quick-link:hover{
+        background: var(--navy);
+        color: var(--navy-deep);
+      }
+
+      /* ---------- Navbar desktop: nav central + globo por último ---------- */
+      @media (min-width: 992px){
+        .navbar-collapse{
+          align-items: center;
+          gap: 18px;
+        }
+        .navbar-lang{
+          margin-left: 0;
+        }
+      }
+
+      /* ---------- Painel do menu mobile (dentro dos 3 traços) ---------- */
+      /* Painel lateral (drawer), com o resto da página escurecido atrás —
+         igual ao padrão de apps nativos/grandes e-commerces. */
+      @media (max-width: 991.98px){
+        body.mobile-menu-open{
+          overflow: hidden;
+        }
+
+        .mobile-menu-backdrop{
+          display: block;
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.55);
+          z-index: 1990;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity .28s ease, visibility 0s linear .28s;
+        }
+        .mobile-menu-backdrop.mobile-open{
+          opacity: 1;
+          visibility: visible;
+          transition: opacity .28s ease, visibility 0s linear 0s;
+        }
+
+        #navbarSupportedContent.navbar-collapse{
+          position: fixed;
+          top: 0;
+          right: 0;
+          left: auto;
+          width: 84%;
+          max-width: 400px;
+          height: 100dvh;
+          margin: 0;
+          background: var(--card);
+          border-radius: 18px 0 0 18px;
+          box-shadow: -18px 0 50px rgba(0,0,0,0.4);
+          z-index: 2000;
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          padding: 26px 24px 28px;
+          overflow-y: auto;
+          transform: translateX(100%);
+          visibility: hidden;
+          transition: transform .34s cubic-bezier(.4,0,.2,1), visibility 0s linear .34s;
+        }
+        #navbarSupportedContent.navbar-collapse.mobile-open{
+          transform: translateX(0);
+          visibility: visible;
+          transition: transform .34s cubic-bezier(.4,0,.2,1), visibility 0s linear 0s;
+        }
+
+        /* topo do painel: idioma, em formato de linha (ícone + label + seta) */
+        #navbarSupportedContent .navbar-lang{
+          order: -1;
+          width: 100%;
+          padding-bottom: 18px;
+          margin-bottom: 12px;
+          border-bottom: 1px solid var(--border);
+        }
+        #navbarSupportedContent .lang-row-trigger{
+          width: 100%;
+          gap: 12px;
+        }
+        #navbarSupportedContent .lang-row-label{
+          display: block;
+          flex: 1;
+          text-align: left;
+          font-family: 'Poppins', sans-serif;
+          font-size: 16px;
+          font-weight: 600;
+          color: var(--ink);
+        }
+        #navbarSupportedContent .lang-row-chevron{
+          display: block;
+          font-size: 20px;
+          color: var(--muted);
+        }
+        #navbarSupportedContent .lang-switch:has(#navLangMenu.open) .lang-row-chevron{
+          transform: rotate(90deg);
+        }
+        #navbarSupportedContent .lang-menu{
+          position: static;
+          box-shadow: none;
+          background: transparent;
+          padding: 6px 0 0 46px;
+          margin-top: -4px;
+          min-width: 0;
+        }
+
+        /* lista principal — itens grandes, com seta, tipo app nativo */
+        #navbarSupportedContent .navbar-nav{
+          gap: 0;
+        }
+        #navbarSupportedContent .navbar-nav .nav-item{
+          border-bottom: 1px solid var(--border);
+        }
+        #navbarSupportedContent .navbar-nav .nav-link{
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-size: 21px;
+          font-weight: 600;
+          padding: 16px 2px !important;
+        }
+        #navbarSupportedContent .navbar-nav .nav-link::after{
+          content: "\203A";
+          font-size: 24px;
+          font-weight: 400;
+          color: var(--muted);
+          margin-left: 10px;
+        }
+
+        /* rodapé do painel — atalhos secundários, tipo "acompanhe seu pedido" */
+        .mobile-panel-extra{
+          margin-top: auto;
+          padding-top: 22px;
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+        .mobile-extra-link{
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-family: 'Poppins', sans-serif;
+          font-size: 15px;
+          font-weight: 700;
+          color: var(--ink);
+          text-decoration: none;
+          padding: 11px 2px;
+        }
+        .mobile-extra-link i{
+          font-size: 18px;
+          width: 20px;
+          text-align: center;
+          color: var(--navy);
+        }
+        .mobile-panel-cta{
+          margin-top: 14px;
+        }
+        .mobile-panel-cta .btn-order{
+          display: block;
+          width: 100%;
+          text-align: center;
+        }
+
+        .navbar-toggler{
+          position: relative;
+          z-index: 2010;
+        }
+        #mobileMenuIcon{
+          font-size: 24px;
+          line-height: 1;
+          color: var(--ink);
+        }
+      }
 
       /* ===== SEÇÃO CONTATO ===== */
       .contact-section{
@@ -327,6 +556,34 @@
         font-size: 16px;
         color: var(--navy);
       }
+      .dish-img-wrap{
+        position: relative;
+        overflow: hidden;
+      }
+      .dish-img-wrap img{
+        margin: 0;
+      }
+      .esgotado-faixa{
+        position: absolute;
+        top: 14px;
+        left: 0;
+        right: 0;
+        background: rgba(20,20,20,0.85);
+        color: #fff;
+        text-align: center;
+        font-family: 'Poppins', sans-serif;
+        font-size: 11.5px;
+        font-weight: 700;
+        letter-spacing: .6px;
+        text-transform: uppercase;
+        padding: 6px 0;
+      }
+      .dish-link{
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        height: 100%;
+      }
 
       /* ===== FOOTER ===== */
       footer{
@@ -440,22 +697,25 @@
     <header>
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Ben Juan Restaurant</a>
-                <div class="lang-switch navbar-lang ms-auto me-2">
-                  <button class="icon-btn" onclick="toggleNavLangMenu(event)" title="Idiomas / Languages" aria-label="Idiomas">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
-                  </button>
-                  <div class="lang-menu" id="navLangMenu">
-                    <div class="lang-option active" data-lang="pt" onclick="setNavLang('pt', this)">🇧🇷 Português</div>
-                    <div class="lang-option" data-lang="en" onclick="setNavLang('en', this)">🇺🇸 English</div>
-                    <div class="lang-option" data-lang="es" onclick="setNavLang('es', this)">🇪🇸 Español</div>
-                  </div>
+                <a class="navbar-brand" href="#">
+                    <span class="brand-full">Ben Juan Restaurant</span>
+                    <span class="brand-short">Ben Juan</span>
+                </a>
+
+                <!-- Atalhos visíveis só no mobile, além de também estarem dentro do menu -->
+                <div class="mobile-quicklinks d-flex d-lg-none">
+                    <a class="quick-link" href="#projetos" data-i18n="navCardapio">Cardápio</a>
+                    <a class="quick-link" href="{% url 'reserva' %}" data-i18n="navReservas">Reservas</a>
                 </div>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+
+                <button class="navbar-toggler" type="button" id="mobileMenuBtn" onclick="toggleMobileMenu()" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Abrir menu">
+                    <i class="bi bi-list" id="mobileMenuIcon"></i>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" onclick="toggleMobileMenu(true)"></div>
+
+                <div class="navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mx-lg-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="#perfil" data-i18n="navSobre">Sobre</a>
                         </li>
@@ -466,16 +726,44 @@
                             <a class="nav-link" href="#contato" data-i18n="navContato">Contato</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="pedidos.html" data-i18n="navPedidos">Pedidos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="reserva.html" data-i18n="navReservas">Reservas</a>
+                            <a class="nav-link" href="{% url 'reserva' %}" data-i18n="navReservas">Reservas</a>
                         </li>
                     </ul>
+
+                    <!-- Globo: no mobile vira uma linha "Idioma ›" no topo do painel; no desktop, é o ícone à direita -->
+                    <div class="lang-switch navbar-lang">
+                        <button class="lang-row-trigger" onclick="toggleNavLangMenu(event)" title="Idiomas / Languages" aria-label="Idiomas" aria-haspopup="true">
+                            <span class="icon-btn icon-btn-gold" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+                            </span>
+                            <span class="lang-row-label">Idioma</span>
+                            <span class="lang-row-chevron">&rsaquo;</span>
+                        </button>
+                        <div class="lang-menu" id="navLangMenu">
+                            <div class="lang-option active" data-lang="pt" onclick="setNavLang('pt', this)">🇧🇷 Português</div>
+                            <div class="lang-option" data-lang="en" onclick="setNavLang('en', this)">🇺🇸 English</div>
+                            <div class="lang-option" data-lang="es" onclick="setNavLang('es', this)">🇪🇸 Español</div>
+                        </div>
+                    </div>
+
+                    <!-- Rodapé do painel mobile: atalhos rápidos + chamada pra ação -->
+                    <div class="mobile-panel-extra d-lg-none">
+                        <a class="mobile-extra-link" href="#" onclick="event.preventDefault(); alert(t('alertInstagram'));">
+                            <i class="bi bi-instagram"></i> Instagram
+                        </a>
+                        <a class="mobile-extra-link" href="#" onclick="event.preventDefault(); alert(t('alertWhatsapp'));">
+                            <i class="bi bi-whatsapp"></i> WhatsApp
+                        </a>
+                        <div class="mobile-panel-cta">
+                            <a class="btn-order" href="#projetos" data-i18n="btnOrder">Peça Aqui</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
+
+
 
     <main>
         <br>
@@ -505,216 +793,45 @@
                     <div class="eyebrow" data-i18n="eyebrowCardapio">Nosso Cardápio</div>
                     <h2 data-i18n="menuTitle">Pratos preparados com cuidado</h2>
                     <p data-i18n="menuSub">Uma seleção da nossa cozinha, pensada pra quem aprecia uma boa mesa.</p>
-                    <a class="btn-order btn-order-hero" href="pedidos.html" data-i18n="btnOrder">Peça Aqui</a>
+                    <a class="btn-order btn-order-hero" href="#projetos" data-i18n="btnOrder">Peça Aqui</a>
                 </div>
 
-                <!-- ENTRADAS -->
-                <div class="menu-category">
-                    <div class="menu-category-title" data-i18n="catEntradas">Entradas</div>
-                    <div class="row g-4">
-                        <div class="col-6 col-lg-3">
-                            <div class="dish-card">
-                                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Dirty_fries_at_Stone's_in_2023.jpg?width=600" alt="Batata frita com cheddar e bacon">
-                                <div class="card-body">
-                                    <h5 class="card-title" data-i18n="d1t">Batata Frita com Cheddar e Bacon</h5>
-                                    <p class="card-text" data-i18n="d1d">Batata frita crocante coberta por cheddar derretido e bacon crocante, finalizada com um toque de ervas. Perfeita pra dividir e abrir o apetite.</p>
-                                    <span class="dish-price">R$ 42,00</span>
+                {% for categoria_valor, categoria_rotulo, itens in cardapio_por_categoria %}
+                    {% if itens %}
+                    <div class="menu-category">
+                        <div class="menu-category-title">{{ categoria_rotulo }}</div>
+                        <div class="row g-4">
+                            {% for produto in itens %}
+                                <div class="col-6 col-lg-3">
+                                    <a href="{% url 'produto_detail' produto.slug %}" class="dish-link">
+                                        <div class="dish-card">
+                                            <div class="dish-img-wrap">
+                                                {% if produto.foto %}
+                                                    <img src="{{ produto.foto.url }}" alt="{{ produto.nome }}">
+                                                {% else %}
+                                                    <img src="{% static 'restaurante/img/quiosque-foto.jpg' %}" alt="{{ produto.nome }}">
+                                                {% endif %}
+                                                {% if produto.esgotado %}
+                                                    <div class="esgotado-faixa">Esgotado</div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ produto.nome }}</h5>
+                                                <p class="card-text">{{ produto.descricao }}</p>
+                                                <span class="dish-price">R$ {{ produto.preco|floatformat:2 }}</span>
+                                            </div>
+                                        </div>
+                                    </a>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <div class="dish-card">
-                                <img src="https://iod.keplrstatic.com/api/ar_1,c_crop,g_north/c_fill,dpr_auto,f_auto,q_70,w_750/mon_marche/REC20230616BruschettaTomatesbasilic.jpg" alt="Bruschetta de tomate e manjericão">
-                                <div class="card-body">
-                                    <h5 class="card-title" data-i18n="d2t">Bruschetta de Tomate</h5>
-                                    <p class="card-text" data-i18n="d2d">Fatias de pão italiano tostado, cobertas com tomate fresco, manjericão e um fio de azeite. Leve e cheia de sabor.</p>
-                                    <span class="dish-price">R$ 34,00</span>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
-                </div>
+                    {% endif %}
+                {% endfor %}
 
-                <!-- PRATOS PRINCIPAIS -->
-                <div class="menu-category">
-                    <div class="menu-category-title" data-i18n="catPrincipais">Pratos Principais</div>
-                    <div class="row g-4">
-                        <div class="col-6 col-lg-3">
-                            <div class="dish-card">
-                                <img src="https://monchitime.com/www/wp-content/uploads/2025/01/Bistro_risotto.jpg" alt="Prato italiano de alta gastronomia">
-                                <div class="card-body">
-                                    <h5 class="card-title" data-i18n="d3t">Risoto da Casa</h5>
-                                    <p class="card-text" data-i18n="d3d">Risoto cremoso preparado lentamente, finalizado com ervas frescas e um fio de azeite.</p>
-                                    <span class="dish-price">R$ 89,00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <div class="dish-card">
-                                <img src="https://www.guiadasemana.com.br/contentFiles/image/2023/07/FEA/destaque_p/70765_w1180h738_1690486263lasanha-mozzafiato-credito-rodrigo-sacramento.jpg" alt="Prato de alta cozinha">
-                                <div class="card-body">
-                                    <h5 class="card-title" data-i18n="d4t">Seleção do Chef</h5>
-                                    <p class="card-text" data-i18n="d4d">Combinação sazonal escolhida pelo chef, com guarnições que mudam conforme a estação.</p>
-                                    <span class="dish-price">R$ 120,00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <div class="dish-card">
-                                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Steak_dinner.jpg?width=600" alt="Filé grelhado com molho da casa">
-                                <div class="card-body">
-                                    <h5 class="card-title" data-i18n="d5t">Filé ao Molho da Casa</h5>
-                                    <p class="card-text" data-i18n="d5d">Corte nobre grelhado no ponto, acompanhado de molho reduzido e legumes salteados.</p>
-                                    <span class="dish-price">R$ 95,00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <div class="dish-card">
-                                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Fancy_dinner_(3152656411).jpg?width=600" alt="Prato especial elegante">
-                                <div class="card-body">
-                                    <h5 class="card-title" data-i18n="d6t">Prato Especial do Chef</h5>
-                                    <p class="card-text" data-i18n="d6d">Uma criação autoral da casa, montada na hora e servida com toque contemporâneo.</p>
-                                    <span class="dish-price">R$ 110,00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <div class="dish-card">
-                                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Squid_ink_pasta_dish.jpg?width=600" alt="Macarrão ao molho escuro com frutos do mar">
-                                <div class="card-body">
-                                    <h5 class="card-title" data-i18n="d7t">Talharim Negro aos Frutos do Mar</h5>
-                                    <p class="card-text" data-i18n="d7d">Massa preparada com tinta-de-lula, salteada com frutos do mar, alho e azeite. Visual marcante, sabor ainda mais intenso.</p>
-                                    <span class="dish-price">R$ 78,00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <div class="dish-card">
-                                <img src="https://www.baressp.com.br/eventos/fotos2/Pizza-Casteloes_.jpg" alt="Pizza de calabresa">
-                                <div class="card-body">
-                                    <h5 class="card-title" data-i18n="d8t">Pizza de Calabresa</h5>
-                                    <p class="card-text" data-i18n="d8d">Massa fina e crocante, coberta com calabresa fatiada, cebola roxa e muçarela derretida. Assada na hora, direto pra sua mesa.</p>
-                                    <span class="dish-price">R$ 65,00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <div class="dish-card">
-                                <img src="https://i.artfile.ru/2048x1367_1217672_[www.ArtFile.ru].jpg" alt="Hambúrguer artesanal suculento">
-                                <div class="card-body">
-                                    <h5 class="card-title" data-i18n="d9t">Hambúrguer Artesanal</h5>
-                                    <p class="card-text" data-i18n="d9d">Blend de carnes nobres grelhado no ponto, queijo derretido, bacon e pão brioche tostado. Servido com acompanhamento da casa.</p>
-                                    <span class="dish-price">R$ 52,00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <div class="dish-card">
-                                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Restaurant_Steak.jpg?width=600" alt="Carne grelhada">
-                                <div class="card-body">
-                                    <h5 class="card-title" data-i18n="d10t">Carne Grelhada</h5>
-                                    <p class="card-text" data-i18n="d10d">Corte selecionado, grelhado no ponto e servido em posta generosa. Sabor limpo, direto e sem frescura.</p>
-                                    <span class="dish-price">R$ 92,00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <div class="dish-card">
-                                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Beef_Stroganoff-01.jpg?width=600" alt="Strogonoff de carne">
-                                <div class="card-body">
-                                    <h5 class="card-title" data-i18n="d11t">Strogonoff</h5>
-                                    <p class="card-text" data-i18n="d11d">Strogonoff de carne cremoso, servido com arroz branco soltinho e batata palha crocante. Um clássico que nunca sai de moda.</p>
-                                    <span class="dish-price">R$ 68,00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SOBREMESAS -->
-                <div class="menu-category">
-                    <div class="menu-category-title" data-i18n="catSobremesas">Sobremesas</div>
-                    <div class="row g-4">
-                        <div class="col-6 col-lg-3">
-                            <div class="dish-card">
-                                <img src="https://blogger.googleusercontent.com/img/proxy/AVvXsEgogn9PCMff3APy4Yij6jbaPoYxKOwAqxuXBAagZhk0mB8SgNA4AepCBTFHkmUH4VmlZeu7aRjMFts1NLMpxNtUA6Gv5Q8V-NCFlBAnW2jh1qOeurZS83ZOWoGn2h7frZ5gV37QfPgCRJtOp8GKDXX3tMddcEpJIFLw4uVX6EzZBI4TbxLXjhIVYn0SLQmwdKiG4L8yB66AKLgq3FjGm_1A_Zt5aYMdNcZUU0erGlzbo4tQcGjw_KOP7ydaNaY31fyk_d8=s0-d-e1-ft" alt="Bolo de chocolate">
-                                <div class="card-body">
-                                    <h5 class="card-title" data-i18n="d12t">Bolo de Chocolate</h5>
-                                    <p class="card-text" data-i18n="d12d">Camadas úmidas de chocolate intenso, com cobertura cremosa e um leve toque amargo. Pra quem não abre mão de um chocolate de verdade.</p>
-                                    <span class="dish-price">R$ 28,00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <div class="dish-card">
-                                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhsfQXiHg1odT-T6wXlVZ3akDRIptwqhRt5DX7Tb_YfsnFAEr-vR-90qWIW2ws-2PZPsHnFEhKvLrGcDoLtUmB5HXmgA2s75oPqJW_bOgxbra3Xs1pTveaAECJXI5uEmEjQZW__xLw4xgYN/s1600/029.JPG" alt="Bolo de baunilha e morango">
-                                <div class="card-body">
-                                    <h5 class="card-title" data-i18n="d13t">Bolo de Baunilha e Morango</h5>
-                                    <p class="card-text" data-i18n="d13d">Camadas leves de baunilha intercaladas com morangos frescos e chantilly. Doce na medida certa, elegante em cada garfada.</p>
-                                    <span class="dish-price">R$ 26,00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <div class="dish-card">
-                                <img src="https://i.pinimg.com/originals/d7/6e/af/d76eaf42bb38ff66e464051fa1ebd351.jpg" alt="Sorvete em taça de vidro">
-                                <div class="card-body">
-                                    <h5 class="card-title" data-i18n="d14t">Sorvete na Taça</h5>
-                                    <p class="card-text" data-i18n="d14d">Bolas de sorvete cremoso servidas em taça de vidro, com calda e cobertura à escolha. Um final refrescante pra fechar a refeição.</p>
-                                    <span class="dish-price">R$ 22,00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- BEBIDAS E DRINKS -->
-                <div class="menu-category">
-                    <div class="menu-category-title" data-i18n="catBebidas">Bebidas e Drinks</div>
-                    <div class="row g-4">
-                        <div class="col-6 col-lg-3">
-                            <div class="dish-card">
-                                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Caipirinha_2.jpg?width=600" alt="Caipirinha de limão com gelo">
-                                <div class="card-body">
-                                    <h5 class="card-title" data-i18n="d15t">Caipirinha de Limão</h5>
-                                    <p class="card-text" data-i18n="d15d">A clássica brasileira: cachaça, limão espremido na hora e açúcar, servida bem gelada. Simples e certeira.</p>
-                                    <span class="dish-price">R$ 18,00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <div class="dish-card">
-                                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Gin_and_tonic.jpg?width=600" alt="Gin tônica com toque tropical">
-                                <div class="card-body">
-                                    <h5 class="card-title" data-i18n="d16t">Gin Tropical</h5>
-                                    <p class="card-text" data-i18n="d16d">Gin premium com água tônica, gelo e um toque de frutas frescas da estação. Leve, aromático e refrescante.</p>
-                                    <span class="dish-price">R$ 28,00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <div class="dish-card">
-                                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Vergina_Beer_Bottle_%26_Glass.jpg?width=600" alt="Cerveja gelada em garrafa e copo">
-                                <div class="card-body">
-                                    <h5 class="card-title" data-i18n="d17t">Cerveja Gelada</h5>
-                                    <p class="card-text" data-i18n="d17d">Long neck ou garrafa 600ml, sempre no gelo. Pergunte ao garçom pelas opções disponíveis do dia.</p>
-                                    <span class="dish-price">R$ 12,00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <div class="dish-card">
-                                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Nimbu_Soda_Or_Lemon_Soda.jpg?width=600" alt="Refrigerante gelado com gelo">
-                                <div class="card-body">
-                                    <h5 class="card-title" data-i18n="d18t">Refrigerante Gelado</h5>
-                                    <p class="card-text" data-i18n="d18d">Coca-Cola, Guaraná ou água com gás, servidos bem gelados. Pergunte ao garçom pelas opções do dia.</p>
-                                    <span class="dish-price">R$ 7,00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% if not cardapio_por_categoria %}
+                    <p class="text-center" style="color: var(--muted);">Nenhum item cadastrado no cardápio ainda.</p>
+                {% endif %}
             </div>
         </section>
 
@@ -745,7 +862,7 @@
       const translations = {
         pt: {
           btnOrder: 'Peça Aqui',
-          navSobre: 'Sobre', navCardapio: 'Cardápio', navContato: 'Contato', navPedidos: 'Pedidos', navReservas: 'Reservas',
+          navSobre: 'Sobre', navCardapio: 'Cardápio', navContato: 'Contato', navReservas: 'Reservas',
           eyebrowHistoria: 'Nossa História',
           aboutTitle: 'Sobre o Ben Juan',
           aboutP1: 'O Ben Juan nasceu da vontade de servir uma cozinha cuidada, sem pressa, num ambiente que convida a ficar. Cada prato é preparado na hora, com ingredientes frescos e receitas que misturam técnica clássica com um toque contemporâneo.',
@@ -780,7 +897,7 @@
         },
         en: {
           btnOrder: 'Order Here',
-          navSobre: 'About', navCardapio: 'Menu', navContato: 'Contact', navPedidos: 'Orders', navReservas: 'Reservations',
+          navSobre: 'About', navCardapio: 'Menu', navContato: 'Contact', navReservas: 'Reservations',
           eyebrowHistoria: 'Our Story',
           aboutTitle: 'About Ben Juan',
           aboutP1: 'Ben Juan was born from the desire to serve carefully crafted cuisine, without rushing, in a place that invites you to stay. Every dish is prepared on the spot, with fresh ingredients and recipes that blend classic technique with a contemporary touch.',
@@ -815,7 +932,7 @@
         },
         es: {
           btnOrder: 'Pide Aquí',
-          navSobre: 'Nosotros', navCardapio: 'Menú', navContato: 'Contacto', navPedidos: 'Pedidos', navReservas: 'Reservas',
+          navSobre: 'Nosotros', navCardapio: 'Menú', navContato: 'Contacto', navReservas: 'Reservas',
           eyebrowHistoria: 'Nuestra Historia',
           aboutTitle: 'Sobre Ben Juan',
           aboutP1: 'Ben Juan nació del deseo de servir una cocina cuidada, sin prisa, en un ambiente que invita a quedarse. Cada plato se prepara al momento, con ingredientes frescos y recetas que combinan la técnica clásica con un toque contemporáneo.',
@@ -891,6 +1008,51 @@
         window.addEventListener('scroll', updateHeaderShadow, { passive: true });
         updateHeaderShadow();
       })();
+
+      /* ---------- Menu mobile em painel lateral (drawer) ---------- */
+      function toggleMobileMenu(forceClose){
+        const panel = document.getElementById('navbarSupportedContent');
+        const backdrop = document.getElementById('mobileMenuBackdrop');
+        const btn = document.getElementById('mobileMenuBtn');
+        const icon = document.getElementById('mobileMenuIcon');
+        if(!panel || !btn) return;
+
+        const isOpen = panel.classList.contains('mobile-open');
+        const shouldOpen = forceClose === true ? false : !isOpen;
+
+        panel.classList.toggle('mobile-open', shouldOpen);
+        if(backdrop) backdrop.classList.toggle('mobile-open', shouldOpen);
+        btn.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+        document.body.classList.toggle('mobile-menu-open', shouldOpen);
+
+        if(icon){
+          icon.classList.toggle('bi-list', !shouldOpen);
+          icon.classList.toggle('bi-x-lg', shouldOpen);
+        }
+      }
+
+      // Fecha o menu ao clicar em algum link dele (no mobile)
+      document.querySelectorAll('#navbarSupportedContent .nav-link, #navbarSupportedContent .mobile-extra-link, #navbarSupportedContent .mobile-panel-cta .btn-order').forEach(function(link){
+        link.addEventListener('click', function(){
+          if(window.innerWidth < 992){
+            toggleMobileMenu(true);
+          }
+        });
+      });
+
+      // Fecha o menu com a tecla Esc
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape'){
+          toggleMobileMenu(true);
+        }
+      });
+
+      // Evita que o menu fique "preso" aberto se a tela virar desktop
+      window.addEventListener('resize', function(){
+        if(window.innerWidth >= 992){
+          toggleMobileMenu(true);
+        }
+      });
     </script>
 </body>
 </html>

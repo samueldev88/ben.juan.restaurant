@@ -1,0 +1,199 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho — Ben Juan Restaurant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'restaurante/css/style.css' %}" rel="stylesheet">
+    <style>
+        body{
+            background-color: var(--cream);
+            color: var(--ink);
+            font-family: 'DM Sans', sans-serif;
+        }
+        .page-wrap{ max-width: 680px; margin: 0 auto; padding: 32px 16px 60px; }
+        .page-wrap h1{
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 24px;
+        }
+        .item-carrinho{
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .item-carrinho .nome{ font-weight: 600; color: var(--ink); }
+        .item-carrinho .detalhe{ font-size: 13px; color: var(--muted); }
+        .item-carrinho .subtotal{ font-weight: 600; color: var(--navy); white-space: nowrap; }
+        .btn-remover{
+            background: none;
+            border: none;
+            color: var(--coral);
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: underline;
+            padding: 0;
+        }
+        .resumo-total{
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--ink);
+            text-align: right;
+            margin: 20px 0;
+        }
+        .checkout-card{
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px;
+            margin-top: 20px;
+        }
+        .checkout-card h2{
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 16px;
+        }
+        .form-label{ color: var(--muted); font-size: 13.5px; }
+        .form-control, .form-select{
+            background: var(--cream);
+            border: 1px solid var(--border);
+            color: var(--ink);
+        }
+        .form-control:focus, .form-select:focus{
+            background: var(--cream);
+            color: var(--ink);
+            border-color: var(--navy);
+            box-shadow: 0 0 0 .2rem rgba(201,162,77,0.25);
+        }
+        .btn-order{
+            background: var(--navy);
+            color: var(--navy-deep) !important;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            border-radius: 999px;
+            padding: 10px 20px;
+            border: none;
+        }
+        .btn-order:hover{ background: var(--amber); }
+        .empty-state{
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+        }
+        a{ color: var(--navy); }
+        .alert-success{
+            background: rgba(74,138,95,0.15);
+            border: 1px solid var(--green);
+            color: var(--ink);
+        }
+        .alert-error, .alert-danger{
+            background: rgba(216,80,60,0.15);
+            border: 1px solid var(--coral);
+            color: var(--ink);
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrap">
+        <h1>Seu Carrinho</h1>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        {% if itens %}
+            {% for entrada in itens %}
+                <div class="item-carrinho">
+                    <div>
+                        <div class="nome">{{ entrada.produto.nome }}</div>
+                        <div class="detalhe">{{ entrada.quantidade }}x R$ {{ entrada.produto.preco|floatformat:2 }}</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div class="subtotal">R$ {{ entrada.subtotal|floatformat:2 }}</div>
+                        <form method="post" action="{% url 'carrinho_remover' entrada.produto.slug %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-remover">Remover</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="resumo-total">Total: R$ {{ total|floatformat:2 }}</div>
+
+            <div class="checkout-card">
+                <h2>Finalizar pedido</h2>
+
+                {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'carrinho_finalizar' %}">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label class="form-label">Como você quer receber?</label>
+                            <select name="tipo_entrega" class="form-select" required>
+                                {% for valor, rotulo in tipo_entrega_choices %}
+                                    <option value="{{ valor }}">{{ rotulo }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Mesa (se for consumo no local)</label>
+                            <input type="text" name="mesa" class="form-control" placeholder="Ex: 5">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Endereço (se for entrega)</label>
+                            <input type="text" name="endereco" class="form-control" placeholder="Rua, número, bairro">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Telefone</label>
+                            <input type="text" name="telefone" class="form-control" placeholder="(00) 00000-0000">
+                        </div>
+
+                        <button type="submit" class="btn-order w-100">Confirmar pedido</button>
+                    </form>
+                {% else %}
+                    <p style="color: var(--sand);">Você precisa estar logado para finalizar o pedido.</p>
+                    <a href="{% url 'login' %}?next={% url 'carrinho_ver' %}" class="btn-order" style="text-decoration:none;">Entrar para finalizar</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p>Seu carrinho está vazio.</p>
+                <a href="{% url 'index' %}" class="btn-order" style="text-decoration:none;">Ver cardápio</a>
+            </div>
+        {% endif %}
+
+        <p class="mt-4"><a href="{% url 'index' %}">&larr; Continuar comprando</a></p>
+    </div>
+
+    <script>
+        // A mensagem verde de sucesso (ex: "produto adicionado ao carrinho")
+        // some sozinha depois de 3 segundos, em vez de ficar pra sempre.
+        document.querySelectorAll('.alert-success').forEach(function(alertEl){
+            setTimeout(function(){
+                alertEl.style.transition = 'opacity .4s ease';
+                alertEl.style.opacity = '0';
+                setTimeout(function(){ alertEl.remove(); }, 400);
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

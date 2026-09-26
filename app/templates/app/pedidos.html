@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -7,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<link href="style.css" rel="stylesheet">
+<link href="{% static 'restaurante/css/style.css' %}" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
@@ -83,36 +84,6 @@
     flex-shrink:0;
   }
   .icon-btn svg{ width:16px; height:16px; }
-  .lang-switch{ position:relative; }
-  .lang-switch .icon-btn{ background: var(--coral); color:#fff; }
-  .lang-menu{
-    display:none;
-    position:absolute;
-    top: calc(100% + 8px);
-    right:0;
-    background: var(--card);
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    padding: 6px;
-    z-index: 50;
-    min-width: 150px;
-  }
-  .lang-menu.open{ display:block; }
-  .lang-option{
-    display:flex;
-    align-items:center;
-    gap: 8px;
-    padding: 9px 10px;
-    border-radius: 8px;
-    font-family:'Poppins', sans-serif;
-    font-size: 13px;
-    font-weight:600;
-    color: var(--ink);
-    cursor:pointer;
-    white-space:nowrap;
-  }
-  .lang-option:hover{ background: rgba(255,255,255,0.06); }
-  .lang-option.active{ background: var(--navy); color: var(--navy-deep); }
 
   .tabs{
     display:flex;
@@ -659,30 +630,20 @@
 <header>
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">Ben Juan Restaurant</a>
-            <div class="lang-switch navbar-lang ms-auto me-2">
-              <button class="icon-btn" onclick="toggleLangMenu(event)" title="Idiomas / Languages" aria-label="Idiomas">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
-              </button>
-              <div class="lang-menu" id="langMenu">
-                <div class="lang-option" data-lang="pt" onclick="setLang('pt')">🇧🇷 Português</div>
-                <div class="lang-option" data-lang="en" onclick="setLang('en')">🇺🇸 English</div>
-                <div class="lang-option" data-lang="es" onclick="setLang('es')">🇪🇸 Español</div>
-              </div>
-            </div>
+            <a class="navbar-brand" href="{% url 'index' %}">Ben Juan Restaurant</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#perfil">Sobre</a>
+                        <a class="nav-link" href="{% url 'index' %}#perfil">Sobre</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#projetos">Cardápio</a>
+                        <a class="nav-link" href="{% url 'index' %}#projetos">Cardápio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#contato">Contato</a>
+                        <a class="nav-link" href="{% url 'index' %}#contato">Contato</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" id="tabCliente" data-i18n="tabPedido" href="#" onclick="switchTab('cliente'); return false;">Fazer Pedido</a>
@@ -691,7 +652,7 @@
                         <a class="nav-link" id="tabMeusPedidos" data-i18n="tabMeusPedidos" href="#" onclick="switchTab('meusPedidos'); return false;">Seus Pedidos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="reserva.html">Reservas</a>
+                        <a class="nav-link" href="{% url 'reserva' %}">Reservas</a>
                     </li>
                 </ul>
             </div>
@@ -796,7 +757,10 @@
   </div>
   <a href="termos-privacidade.pdf" target="_blank" style="display:block; text-align:center; font-size:11px; color:var(--muted); text-decoration:underline; margin-top:6px;">Política de Privacidade e Termos de Uso</a>
   <div class="staff-cta-row">
-    <div class="staff-cta-btn staff-cta-primary" data-i18n="staffAccess" onclick="abrirDemo()">🔒 Acesso da equipe</div>
+    <div class="staff-cta-btn staff-cta-primary" data-i18n="staffAccess" onclick="abrirPainelEquipe()">🔒 Acesso da equipe</div>
+  </div>
+  <div style="text-align:center; margin-top:10px;">
+    <a href="#" onclick="event.preventDefault(); abrirDemo();" style="font-size:11.5px; color:var(--muted); text-decoration:underline;">Ver com dados fictícios de demonstração</a>
   </div>
 </div>
 </div>
@@ -936,18 +900,6 @@
 
   let currentLang = 'pt';
 
-  function toggleLangMenu(event){
-    if(event) event.stopPropagation();
-    document.getElementById('langMenu').classList.toggle('open');
-  }
-
-  document.addEventListener('click', function(e){
-    const menu = document.getElementById('langMenu');
-    if(menu && menu.classList.contains('open') && !menu.contains(e.target)){
-      menu.classList.remove('open');
-    }
-  });
-
   function applyStaticI18n(){
     const dict = translations[currentLang];
     document.querySelectorAll('[data-i18n]').forEach(function(el){
@@ -963,21 +915,6 @@
     });
   }
 
-  function setLang(lang){
-    currentLang = lang;
-    applyStaticI18n();
-    document.getElementById('langMenu').classList.remove('open');
-    if(typeof updateCartBar === 'function') updateCartBar();
-    if(typeof renderMeusPedidos === 'function') renderMeusPedidos();
-    if(typeof renderMenu === 'function' && typeof menu !== 'undefined'){
-      renderMenu(menu.entradas, 'menuEntradas');
-      renderMenu(menu.principais, 'menuPrincipais');
-      renderMenu(menu.sobremesas, 'menuSobremesas');
-      renderMenu(menu.bebidas, 'menuBebidas');
-      renderMenu(menu.drinks, 'menuDrinks');
-    }
-  }
-
   applyStaticI18n();
 
   // Retorna o número da mesa informado pelo cliente.
@@ -987,19 +924,24 @@
   }
 
   // =====================================================================
-  // SITE 100% ILUSTRATIVO — não existe backend, banco de dados ou serviço
-  // externo de nenhum tipo aqui. Tudo (pedidos, reservas, estoque) vive
-  // só na memória do navegador enquanto a página está aberta: ao recarregar
-  // a página, tudo volta ao estado inicial. Isso é intencional: este é um
-  // projeto de portfólio, feito só para demonstrar a interface.
+  // Este projeto tem back-end de verdade (Django + banco de dados): o
+  // cardápio, os pedidos e as reservas do "Painel da Equipe" ficam salvos
+  // no banco e são carregados via fetch() na API (veja restaurante/views.py
+  // e restaurante/urls.py). Já o "Modo demonstração" (abrirDemo()) continua
+  // sendo só uma vitrine com dados fictícios em memória, pra quem quiser
+  // ver a interface preenchida sem mexer em dados reais.
   // =====================================================================
 
-  // ESTOQUE (itens marcados como esgotados pela equipe) — objeto fictício
-  // em memória. Formato: { "p1": true, "b7": true } → chave = id do item,
-  // true = esgotado.
+  // ESTOQUE fictício, usado só dentro do "Modo demonstração" (abrirDemo).
+  // Fora do modo demo, o campo `esgotado` de cada item já vem do banco
+  // (ver campo `esgotado` no objeto `menu`, carregado via /api/cardapio/).
   let estoque = {};
 
   function itemEsgotado(id){
+    if(modoReal){
+      const item = allItems().find(i => i.id === id);
+      return !!(item && item.esgotado);
+    }
     return !!estoque[id];
   }
 
@@ -1023,6 +965,8 @@
     ];
   }
   function abrirDemo(){
+    pararPolling();
+    modoReal = false;
     orders = pedidosFicticios();
     reservations = reservasFicticias();
     estoque = {};
@@ -1042,9 +986,32 @@
     switchTab('equipe');
   }
 
-  // Botão "Sair da conta da equipe": encerra o modo demo, limpando os
-  // dados fictícios da memória.
+  // Abre o painel de verdade: pedidos e reservas vêm do banco de dados via
+  // API, e ficam se atualizando sozinhos (polling a cada poucos segundos)
+  // pra simular "tempo real" sem precisar de WebSockets.
+  function abrirPainelEquipe(){
+    modoReal = true;
+    document.getElementById('tabEquipe').classList.remove('hidden');
+    document.getElementById('tabReservas').classList.remove('hidden');
+    document.getElementById('tabEstoque').classList.remove('hidden');
+    document.getElementById('tabLixeira').classList.remove('hidden');
+    document.getElementById('demoBanner').classList.add('hidden');
+    carregarPainelReal();
+    renderEstoqueEquipe();
+    pararPolling();
+    pollTimer = setInterval(carregarPainelReal, 4000);
+    switchTab('equipe');
+  }
+
+  function pararPolling(){
+    if(pollTimer){ clearInterval(pollTimer); pollTimer = null; }
+  }
+
+  // Botão "Sair da conta da equipe": encerra o modo demo ou o painel real,
+  // limpando os dados e parando a atualização automática.
   function sairEquipe(){
+    pararPolling();
+    modoReal = false;
     orders = [];
     reservations = [];
     estoque = {};
@@ -1064,34 +1031,11 @@
   // =====================================================================
   // CARDÁPIO / CARRINHO
   // =====================================================================
-  const menu = {
-    entradas: [
-      {id:'e1', name:'Batata Frita com Cheddar e Bacon', price:42},
-    ],
-    principais: [
-      {id:'m1', name:'Risoto da Casa', price:89},
-      {id:'m2', name:'Seleção do Chef', price:120},
-      {id:'m3', name:'Filé ao Molho da Casa', price:95},
-      {id:'m4', name:'Prato Especial do Chef', price:110},
-      {id:'m5', name:'Talharim Negro aos Frutos do Mar', price:78},
-      {id:'m6', name:'Pizza de Calabresa', price:65},
-      {id:'m7', name:'Hambúrguer Artesanal', price:52},
-      {id:'m8', name:'Carne Grelhada', price:92},
-      {id:'m9', name:'Strogonoff', price:68},
-    ],
-    sobremesas: [
-      {id:'s1', name:'Bolo de Chocolate', price:28},
-      {id:'s2', name:'Bolo de Baunilha e Morango', price:26},
-      {id:'s3', name:'Sorvete na Taça', price:22},
-    ],
-    bebidas:[
-      {id:'b1', name:'Refrigerante Gelado', price:7},
-      {id:'b2', name:'Cerveja Gelada', price:12},
-    ],
-    drinks: [
-      {id:'d1', name:'Caipirinha de Limão', price:18},
-      {id:'d2', name:'Gin Tropical', price:28},
-    ]
+  // Carregado de /api/cardapio/ em carregarCardapio() — os ids continuam
+  // os mesmos de antes (e1, m1, m2...) só pra manter compatibilidade com
+  // o dicionário de traduções `itemNames` logo abaixo.
+  let menu = {
+    entradas: [], principais: [], sobremesas: [], bebidas: [], drinks: []
   };
 
   // Tradução dos nomes dos itens do cardápio (a lista `menu` acima continua
@@ -1131,6 +1075,67 @@
   let cart = {};
   let orders = [];
   let reservations = [];
+
+  // ---------------------------------------------------------------------
+  // Helpers de comunicação com o back-end Django (API em restaurante/views.py)
+  // ---------------------------------------------------------------------
+  let modoReal = false;   // true = painel da equipe conectado ao banco de verdade
+  let pollTimer = null;   // intervalo de atualização automática do painel
+
+  function getCookie(name){
+    const valor = `; ${document.cookie}`;
+    const partes = valor.split(`; ${name}=`);
+    if(partes.length === 2) return decodeURIComponent(partes.pop().split(';').shift());
+    return null;
+  }
+
+  function postJSON(url, body){
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken'),
+      },
+      body: JSON.stringify(body || {}),
+    }).then(async (resp) => {
+      let data = {};
+      try { data = await resp.json(); } catch(e){ /* resposta sem corpo */ }
+      if(!resp.ok && data.ok === undefined) data.ok = false;
+      return data;
+    });
+  }
+
+  async function carregarCardapio(){
+    try {
+      const resp = await fetch("{% url 'api_cardapio' %}");
+      menu = await resp.json();
+    } catch(e){
+      console.error('Não foi possível carregar o cardápio do servidor.', e);
+    }
+    renderMenu(menu.entradas, 'menuEntradas');
+    renderMenu(menu.principais, 'menuPrincipais');
+    renderMenu(menu.sobremesas, 'menuSobremesas');
+    renderMenu(menu.bebidas, 'menuBebidas');
+    renderMenu(menu.drinks, 'menuDrinks');
+  }
+
+  // Carrega pedidos + reservas reais do banco (painel da equipe "de verdade").
+  async function carregarPainelReal(){
+    try {
+      const [respPedidos, respReservas] = await Promise.all([
+        fetch("{% url 'api_pedidos_list' %}"),
+        fetch("{% url 'api_reservas_list' %}"),
+      ]);
+      orders = await respPedidos.json();
+      reservations = await respReservas.json();
+    } catch(e){
+      console.error('Não foi possível carregar o painel da equipe.', e);
+    }
+    renderBoard();
+    renderReservas();
+    renderLixeira();
+    renderMeusPedidos();
+  }
 
   function renderMenu(list, containerId){
     const el = document.getElementById(containerId);
@@ -1230,44 +1235,46 @@
   // o pedido é só adicionado à lista local (`orders`) já como "recebido",
   // e aparece normalmente no painel ilustrativo da equipe.
   // =====================================================================
+  // Envia o pedido pra valer pro back-end (tabela Pedido no banco). O
+  // servidor recalcula preços a partir do cardápio salvo — o front-end só
+  // manda os ids e quantidades do carrinho.
   function confirmarPedidoFicticio(){
     const mesa = obterLocalPedido();
-    const items = Object.values(cart).map(it => `${it.qty}x ${it.name}`);
-    if(items.length === 0) return;
+    const itensPayload = Object.entries(cart).map(([id, it]) => ({id, qty: it.qty}));
+    if(itensPayload.length === 0) return;
 
     document.getElementById('btnConfirmarPedido').style.display = 'none';
     document.getElementById('cartaoErro').style.display = 'none';
     document.getElementById('pedidoCarregando').style.display = 'block';
 
-    // pequeno delay só pra simular visualmente o "enviando pedido..."
-    setTimeout(() => {
-      const novoPedido = {
-        id: 'pedido-' + Date.now(),
-        mesa: mesa,
-        items: items,
-        total: cartTotal(),
-        status: 'recebido',
-        paymentStatus: 'simulado_ficticio',
-        time: formatarDataHora(new Date())
-      };
-      orders.push(novoPedido);
+    postJSON("{% url 'api_pedidos' %}", { mesa: mesa, itens: itensPayload })
+      .then((data) => {
+        if(!data.ok || !data.pedido) throw new Error(data.error || 'erro_desconhecido');
 
-      cart = {};
-      renderMenu(menu.entradas, 'menuEntradas');
-      renderMenu(menu.principais, 'menuPrincipais');
-      renderMenu(menu.sobremesas, 'menuSobremesas');
-      renderMenu(menu.bebidas, 'menuBebidas');
-      renderMenu(menu.drinks, 'menuDrinks');
-      updateCartBar();
-      closeCart();
-      adicionarMeuPedido(novoPedido.id);
+        orders.push(data.pedido);
 
-      // Assim que o pedido é confirmado, já mostramos ele caindo
-      // direto no painel da equipe (fluxo de demonstração).
-      document.getElementById('tabEquipe').classList.remove('hidden');
-      renderBoard();
-      switchTab('equipe');
-    }, 500);
+        cart = {};
+        renderMenu(menu.entradas, 'menuEntradas');
+        renderMenu(menu.principais, 'menuPrincipais');
+        renderMenu(menu.sobremesas, 'menuSobremesas');
+        renderMenu(menu.bebidas, 'menuBebidas');
+        renderMenu(menu.drinks, 'menuDrinks');
+        updateCartBar();
+        closeCart();
+        adicionarMeuPedido(data.pedido.id);
+
+        // Assim que o pedido é confirmado, já mostramos ele caindo
+        // direto no painel da equipe.
+        document.getElementById('tabEquipe').classList.remove('hidden');
+        renderBoard();
+        switchTab('equipe');
+      })
+      .catch((erro) => {
+        console.error('Erro ao enviar pedido', erro);
+        document.getElementById('pedidoCarregando').style.display = 'none';
+        document.getElementById('cartaoErro').style.display = 'block';
+        document.getElementById('btnConfirmarPedido').style.display = 'block';
+      });
   }
 
   // ===== EQUIPE: avança status do pedido (só em memória) =====
@@ -1276,15 +1283,22 @@
   // enquanto a página estiver aberta.
   function excluirPedido(id, event){
     if(event) event.stopPropagation();
-    if(confirm('Mover este pedido para a lixeira? Dá pra restaurar depois, na aba Lixeira.')){
-      const o = orders.find(o => o.id === id);
-      if(o){ o.excluido = true; o.excluidoEm = new Date(); }
-      renderBoard(); renderLixeira(); renderMeusPedidos();
+    if(!confirm('Mover este pedido para a lixeira? Dá pra restaurar depois, na aba Lixeira.')) return;
+    if(modoReal){
+      postJSON(`/api/pedidos/${id}/excluir/`, {}).then(carregarPainelReal);
+      return;
     }
+    const o = orders.find(o => o.id === id);
+    if(o){ o.excluido = true; o.excluidoEm = new Date(); }
+    renderBoard(); renderLixeira(); renderMeusPedidos();
   }
 
   function restaurarPedido(id, event){
     if(event) event.stopPropagation();
+    if(modoReal){
+      postJSON(`/api/pedidos/${id}/restaurar/`, {}).then(carregarPainelReal);
+      return;
+    }
     const o = orders.find(o => o.id === id);
     if(o){ o.excluido = false; delete o.excluidoEm; }
     renderBoard(); renderLixeira(); renderMeusPedidos();
@@ -1292,13 +1306,20 @@
 
   function excluirPedidoDefinitivo(id, event){
     if(event) event.stopPropagation();
-    if(confirm('Apagar este pedido de vez? Essa ação não pode ser desfeita.')){
-      orders = orders.filter(o => o.id !== id);
-      renderBoard(); renderLixeira(); renderMeusPedidos();
+    if(!confirm('Apagar este pedido de vez? Essa ação não pode ser desfeita.')) return;
+    if(modoReal){
+      postJSON(`/api/pedidos/${id}/apagar/`, {}).then(carregarPainelReal);
+      return;
     }
+    orders = orders.filter(o => o.id !== id);
+    renderBoard(); renderLixeira(); renderMeusPedidos();
   }
 
   function advanceStatus(id){
+    if(modoReal){
+      postJSON(`/api/pedidos/${id}/avancar/`, {}).then(carregarPainelReal);
+      return;
+    }
     const order = orders.find(o => o.id === id);
     if(!order) return;
     if(order.status === 'recebido') order.status = 'preparando';
@@ -1307,8 +1328,12 @@
     renderMeusPedidos();
   }
 
-  // Confirmação (fictícia) de que o pagamento foi recebido.
+  // Confirmação de que o pagamento foi recebido.
   function confirmarPagamento(id){
+    if(modoReal){
+      postJSON(`/api/pedidos/${id}/pagamento/`, {}).then(carregarPainelReal);
+      return;
+    }
     const o = orders.find(o => o.id === id);
     if(o){ o.status = 'recebido'; o.paymentStatus = 'aprovado'; }
     renderBoard();
@@ -1398,15 +1423,22 @@
   // ===== EQUIPE: reservas =====
   function excluirReserva(id, event){
     if(event) event.stopPropagation();
-    if(confirm('Mover esta reserva para a lixeira? Dá pra restaurar depois, na aba Lixeira.')){
-      const r = reservations.find(r => r.id === id);
-      if(r){ r.excluido = true; r.excluidoEm = new Date(); }
-      renderReservas(); renderLixeira();
+    if(!confirm('Mover esta reserva para a lixeira? Dá pra restaurar depois, na aba Lixeira.')) return;
+    if(modoReal){
+      postJSON(`/api/reservas/${id}/excluir/`, {}).then(carregarPainelReal);
+      return;
     }
+    const r = reservations.find(r => r.id === id);
+    if(r){ r.excluido = true; r.excluidoEm = new Date(); }
+    renderReservas(); renderLixeira();
   }
 
   function restaurarReserva(id, event){
     if(event) event.stopPropagation();
+    if(modoReal){
+      postJSON(`/api/reservas/${id}/restaurar/`, {}).then(carregarPainelReal);
+      return;
+    }
     const r = reservations.find(r => r.id === id);
     if(r){ r.excluido = false; delete r.excluidoEm; }
     renderReservas(); renderLixeira();
@@ -1414,10 +1446,13 @@
 
   function excluirReservaDefinitivo(id, event){
     if(event) event.stopPropagation();
-    if(confirm('Apagar esta reserva de vez? Essa ação não pode ser desfeita.')){
-      reservations = reservations.filter(r => r.id !== id);
-      renderReservas(); renderLixeira();
+    if(!confirm('Apagar esta reserva de vez? Essa ação não pode ser desfeita.')) return;
+    if(modoReal){
+      postJSON(`/api/reservas/${id}/apagar/`, {}).then(carregarPainelReal);
+      return;
     }
+    reservations = reservations.filter(r => r.id !== id);
+    renderReservas(); renderLixeira();
   }
 
   function formatarDataReserva(dataStr){
@@ -1609,8 +1644,15 @@
     if(tab === 'lixeira') renderLixeira();
   }
 
-  // ===== EQUIPE: estoque (itens em falta) — só em memória =====
+  // ===== EQUIPE: estoque (itens em falta) =====
+  // Em modo real, persiste no banco (ItemCardapio.esgotado) e depois
+  // recarrega o cardápio pra refletir no cliente também. No modo
+  // demonstração, continua só em memória (objeto `estoque`).
   function toggleEstoque(id){
+    if(modoReal){
+      postJSON(`/api/estoque/${id}/`, {}).then(() => carregarCardapio().then(renderEstoqueEquipe));
+      return;
+    }
     estoque[id] = !estoque[id];
     renderEstoqueEquipe();
     renderMenu(menu.entradas, 'menuEntradas');
@@ -1643,11 +1685,7 @@
     `).join('');
   }
 
-  renderMenu(menu.entradas, 'menuEntradas');
-  renderMenu(menu.principais, 'menuPrincipais');
-  renderMenu(menu.sobremesas, 'menuSobremesas');
-  renderMenu(menu.bebidas, 'menuBebidas');
-  renderMenu(menu.drinks, 'menuDrinks');
+  carregarCardapio();
 </script>
 
 </body>
