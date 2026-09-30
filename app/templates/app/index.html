@@ -85,77 +85,11 @@
           display: none;
         }
       }
-      .navbar-lang{
-        flex-shrink: 0;
-      }
       .navbar-toggler{
         flex-shrink: 0;
       }
       .mobile-menu-backdrop{
         display: none;
-      }
-
-      /* ---------- Dropdown de idiomas da navbar (igual ao pedidos.html / reserva.html) ---------- */
-      .icon-btn{
-        width:34px; height:34px;
-        border-radius:50%;
-        background: var(--coral);
-        color:#fff;
-        display:flex; align-items:center; justify-content:center;
-        text-decoration:none;
-        border:none;
-        cursor:pointer;
-        flex-shrink:0;
-      }
-      .icon-btn svg{ width:16px; height:16px; }
-      .lang-switch{ position:relative; }
-      .lang-row-trigger{
-        display: flex;
-        align-items: center;
-        gap: 0;
-        background: none;
-        border: none;
-        padding: 0;
-        cursor: pointer;
-      }
-      .lang-row-label{ display: none; }
-      .lang-row-chevron{
-        display: none;
-        transition: transform .2s ease;
-      }
-      .lang-menu{
-        display:none;
-        position:absolute;
-        top: calc(100% + 8px);
-        right:0;
-        background: var(--card);
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        padding: 6px;
-        z-index: 50;
-        min-width: 150px;
-      }
-      .lang-menu.open{ display:block; }
-      .lang-option{
-        display:flex;
-        align-items:center;
-        gap: 8px;
-        padding: 9px 10px;
-        border-radius: 8px;
-        font-family:'Poppins', sans-serif;
-        font-size: 13px;
-        font-weight:600;
-        color: var(--ink);
-        cursor:pointer;
-        white-space:nowrap;
-      }
-      .lang-option:hover{ background: rgba(255,255,255,0.06); }
-      .lang-option.active{ background: var(--navy); color: var(--navy-deep); }
-
-      /* ---------- Globo dourado ---------- */
-      .icon-btn-gold{
-        background: var(--navy);
-        color: var(--navy-deep);
       }
 
       /* ---------- Links rápidos no topo (mobile) ---------- */
@@ -177,19 +111,53 @@
         text-decoration: none;
         transition: background .15s ease, color .15s ease;
       }
-      .quick-link:hover{
+      .quick-link:hover,
+      .quick-link-fill{
         background: var(--navy);
         color: var(--navy-deep);
       }
+      .quick-link-fill:hover{
+        background: var(--amber);
+        border-color: var(--amber);
+      }
+      button.quick-link{
+        background: transparent;
+        cursor: pointer;
+      }
+      .nav-link-button{
+        background: none;
+        border: 0;
+        width: 100%;
+        text-align: left;
+      }
 
-      /* ---------- Navbar desktop: nav central + globo por último ---------- */
+      /* ---------- Conta no desktop ---------- */
+      .nav-auth{
+        align-items: center;
+        gap: 10px;
+      }
+      .nav-auth .quick-link{
+        font-size: 13.5px;
+        padding: 8px 18px;
+      }
+      .nav-user{
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13.5px;
+        font-weight: 600;
+        color: var(--ink);
+        max-width: 160px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* ---------- Navbar desktop: nav central ---------- */
       @media (min-width: 992px){
         .navbar-collapse{
           align-items: center;
           gap: 18px;
-        }
-        .navbar-lang{
-          margin-left: 0;
         }
       }
 
@@ -243,44 +211,6 @@
           transform: translateX(0);
           visibility: visible;
           transition: transform .34s cubic-bezier(.4,0,.2,1), visibility 0s linear 0s;
-        }
-
-        /* topo do painel: idioma, em formato de linha (ícone + label + seta) */
-        #navbarSupportedContent .navbar-lang{
-          order: -1;
-          width: 100%;
-          padding-bottom: 18px;
-          margin-bottom: 12px;
-          border-bottom: 1px solid var(--border);
-        }
-        #navbarSupportedContent .lang-row-trigger{
-          width: 100%;
-          gap: 12px;
-        }
-        #navbarSupportedContent .lang-row-label{
-          display: block;
-          flex: 1;
-          text-align: left;
-          font-family: 'Poppins', sans-serif;
-          font-size: 16px;
-          font-weight: 600;
-          color: var(--ink);
-        }
-        #navbarSupportedContent .lang-row-chevron{
-          display: block;
-          font-size: 20px;
-          color: var(--muted);
-        }
-        #navbarSupportedContent .lang-switch:has(#navLangMenu.open) .lang-row-chevron{
-          transform: rotate(90deg);
-        }
-        #navbarSupportedContent .lang-menu{
-          position: static;
-          box-shadow: none;
-          background: transparent;
-          padding: 6px 0 0 46px;
-          margin-top: -4px;
-          min-width: 0;
         }
 
         /* lista principal — itens grandes, com seta, tipo app nativo */
@@ -353,7 +283,7 @@
 
       /* ===== SEÇÃO CONTATO ===== */
       .contact-section{
-        padding: 64px 0 72px;
+        padding-block: 48px 56px;
         text-align: center;
       }
       .contact-section .eyebrow{
@@ -375,7 +305,7 @@
         color: var(--muted);
         font-size: 15px;
         max-width: 460px;
-        margin: 0 auto 30px;
+        margin: 0 auto 22px;
       }
       .contact-socials{
         display: flex;
@@ -414,8 +344,13 @@
 
       /* ===== SEÇÃO SOBRE ===== */
       .about-section{
-        padding: 56px 0;
+        padding-block: 44px;
         border-bottom: 1px solid var(--border);
+      }
+      .about-text{
+        max-width: 720px;
+        margin-inline: auto;
+        text-align: center;
       }
       .about-section .eyebrow{
         font-family: 'Poppins', sans-serif;
@@ -431,35 +366,54 @@
         font-weight: 700;
         font-size: 40px;
         color: var(--ink);
-        margin-bottom: 16px;
+        margin-bottom: 14px;
       }
       .about-section p{
         color: var(--muted);
-        font-size: 15px;
-        line-height: 1.7;
-        margin-bottom: 14px;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 0;
+      }
+      .about-copy{
+        max-width: 620px;
+        margin-top: 18px;
+      }
+      .about-section p:last-child{
+        margin-bottom: 0;
       }
       .about-img{
+        display: block;
         width: 100%;
-        height: 320px;
+        max-width: 880px;
+        margin-inline: auto;
+        aspect-ratio: 3 / 2;
+        height: auto;
         object-fit: cover;
-        border-radius: 14px;
+        object-position: center;
+        border-radius: 16px;
         border: 1px solid var(--border);
+        box-shadow: 0 12px 32px rgba(0,0,0,.18);
       }
 
-      @media (min-width: 768px){
+      @media (min-width: 992px){
         .about-img{
-          height: 400px;
+          aspect-ratio: 16 / 9;
+        }
+        .about-copy{
+          margin-top: 24px;
+        }
+        .about-section .about-text:first-child h2{
+          margin-bottom: 22px;
         }
       }
 
       /* ===== SEÇÃO DO CARDÁPIO ===== */
       #projetos{
-        padding: 56px 0 70px;
+        padding: 44px 0 56px;
       }
       .menu-heading{
         text-align: center;
-        margin-bottom: 40px;
+        margin-bottom: 28px;
       }
       .menu-heading .eyebrow{
         font-family: 'Poppins', sans-serif;
@@ -484,7 +438,7 @@
       }
 
       .menu-category{
-        margin-bottom: 44px;
+        margin-bottom: 32px;
       }
       .menu-category:last-child{
         margin-bottom: 0;
@@ -499,7 +453,7 @@
         letter-spacing: 1.5px;
         text-transform: uppercase;
         color: var(--coral);
-        margin-bottom: 20px;
+        margin-bottom: 14px;
         padding-left: 2px;
       }
       .menu-category-title::before{
@@ -589,7 +543,7 @@
       footer{
         background: var(--navy-deep);
         border-top: 1px solid var(--border);
-        padding: 26px 0;
+        padding: 20px 0;
         text-align: center;
         color: var(--muted);
         font-size: 13px;
@@ -617,30 +571,26 @@
         .about-section p{
           text-align: center;
         }
-        .about-img{
-          height: 240px;
-          margin-top: 20px;
-        }
         .about-section{
-          padding: 40px 0;
+          padding-block: 32px;
         }
         .about-section h2{
           font-size: 32px;
         }
         #projetos{
-          padding: 40px 0 50px;
+          padding: 32px 0 40px;
         }
         .menu-heading{
-          margin-bottom: 28px;
+          margin-bottom: 22px;
         }
         .menu-heading h2{
           font-size: 34px;
         }
         .menu-category{
-          margin-bottom: 34px;
+          margin-bottom: 26px;
         }
         .contact-section{
-          padding: 48px 0 56px;
+          padding-block: 36px 44px;
         }
         .contact-section h2{
           font-size: 32px;
@@ -677,6 +627,14 @@
       }
 
       @media (max-width: 359.98px){
+        .mobile-quicklinks{
+          gap: 6px;
+          margin-right: 6px;
+        }
+        .quick-link{
+          font-size: 11.5px;
+          padding: 6px 10px;
+        }
         .navbar-brand{
           font-size: 18px;
         }
@@ -704,8 +662,13 @@
 
                 <!-- Atalhos visíveis só no mobile, além de também estarem dentro do menu -->
                 <div class="mobile-quicklinks d-flex d-lg-none">
-                    <a class="quick-link" href="#projetos" data-i18n="navCardapio">Cardápio</a>
-                    <a class="quick-link" href="{% url 'reserva' %}" data-i18n="navReservas">Reservas</a>
+                    {% if user.is_authenticated %}
+                        <a class="quick-link" href="#projetos">Cardápio</a>
+                        <a class="quick-link" href="{% url 'reserva' %}">Reservas</a>
+                    {% else %}
+                        <a class="quick-link" href="{% url 'login' %}">Login</a>
+                        <a class="quick-link quick-link-fill" href="{% url 'cadastro' %}">Cadastro</a>
+                    {% endif %}
                 </div>
 
                 <button class="navbar-toggler" type="button" id="mobileMenuBtn" onclick="toggleMobileMenu()" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Abrir menu">
@@ -717,45 +680,58 @@
                 <div class="navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-lg-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#perfil" data-i18n="navSobre">Sobre</a>
+                            <a class="nav-link active" aria-current="page" href="#perfil">Sobre</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#projetos" data-i18n="navCardapio">Cardápio</a>
+                            <a class="nav-link active" aria-current="page" href="#projetos">Cardápio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#contato" data-i18n="navContato">Contato</a>
+                            <a class="nav-link" href="#contato">Contato</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'reserva' %}" data-i18n="navReservas">Reservas</a>
+                            <a class="nav-link" href="{% url 'reserva' %}">Reservas</a>
                         </li>
+                        {% if not user.is_authenticated %}
+                            <li class="nav-item d-lg-none">
+                                <a class="nav-link" href="{% url 'login' %}">Login</a>
+                            </li>
+                            <li class="nav-item d-lg-none">
+                                <a class="nav-link" href="{% url 'cadastro' %}">Cadastro</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item d-lg-none">
+                                <form method="post" action="{% url 'logout' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="nav-link nav-link-button">Sair</button>
+                                </form>
+                            </li>
+                        {% endif %}
                     </ul>
 
-                    <!-- Globo: no mobile vira uma linha "Idioma ›" no topo do painel; no desktop, é o ícone à direita -->
-                    <div class="lang-switch navbar-lang">
-                        <button class="lang-row-trigger" onclick="toggleNavLangMenu(event)" title="Idiomas / Languages" aria-label="Idiomas" aria-haspopup="true">
-                            <span class="icon-btn icon-btn-gold" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
-                            </span>
-                            <span class="lang-row-label">Idioma</span>
-                            <span class="lang-row-chevron">&rsaquo;</span>
-                        </button>
-                        <div class="lang-menu" id="navLangMenu">
-                            <div class="lang-option active" data-lang="pt" onclick="setNavLang('pt', this)">🇧🇷 Português</div>
-                            <div class="lang-option" data-lang="en" onclick="setNavLang('en', this)">🇺🇸 English</div>
-                            <div class="lang-option" data-lang="es" onclick="setNavLang('es', this)">🇪🇸 Español</div>
-                        </div>
+                    <!-- Conta (só desktop): visitante vê Login/Cadastro, logado vê nome + Sair -->
+                    <div class="nav-auth d-none d-lg-flex">
+                        {% if user.is_authenticated %}
+                            <span class="nav-user"><i class="bi bi-person-circle"></i> {{ user.username }}</span>
+                            <form method="post" action="{% url 'logout' %}" class="m-0">
+                                {% csrf_token %}
+                                <button type="submit" class="quick-link">Sair</button>
+                            </form>
+                        {% else %}
+                            <a class="quick-link" href="{% url 'login' %}">Login</a>
+                            <a class="quick-link quick-link-fill" href="{% url 'cadastro' %}">Cadastro</a>
+                        {% endif %}
                     </div>
 
                     <!-- Rodapé do painel mobile: atalhos rápidos + chamada pra ação -->
                     <div class="mobile-panel-extra d-lg-none">
-                        <a class="mobile-extra-link" href="#" onclick="event.preventDefault(); alert(t('alertInstagram'));">
+                        <a class="mobile-extra-link" href="#" onclick="event.preventDefault(); alert('Este é um site fictício, criado apenas para fins de demonstração/estudo. Não há Instagram real associado.');">
                             <i class="bi bi-instagram"></i> Instagram
                         </a>
-                        <a class="mobile-extra-link" href="#" onclick="event.preventDefault(); alert(t('alertWhatsapp'));">
+                        <a class="mobile-extra-link" href="#" onclick="event.preventDefault(); alert('Este é um site fictício, criado apenas para fins de demonstração/estudo. Não há WhatsApp real associado.');">
                             <i class="bi bi-whatsapp"></i> WhatsApp
                         </a>
                         <div class="mobile-panel-cta">
-                            <a class="btn-order" href="#projetos" data-i18n="btnOrder">Peça Aqui</a>
+                            <a class="btn-order" href="#projetos">Peça Aqui</a>
                         </div>
                     </div>
                 </div>
@@ -766,23 +742,18 @@
 
 
     <main>
-        <br>
         <section id="perfil">
             <div class="container about-section">
-                <div class="row align-items-center g-5">
-                    <div class="col-12 col-md-5">
-                        <div class="eyebrow" data-i18n="eyebrowHistoria">Nossa História</div>
-                        <h2 data-i18n="aboutTitle">Sobre o Ben Juan</h2>
-                        <p data-i18n="aboutP1">O Ben Juan nasceu da vontade de servir uma cozinha cuidada, sem pressa, num ambiente
-                        que convida a ficar. Cada prato é preparado na hora, com ingredientes frescos e receitas
-                        que misturam técnica clássica com um toque contemporâneo.</p>
-                        <p data-i18n="aboutP2">Mais do que um lugar pra comer bem, o Ben Juan é pensado pra ser um espaço de encontro
-                        — seja um almoço em família, um jantar a dois ou uma comemoração especial. Nossa equipe
-                        está sempre por perto pra garantir que sua experiência seja tão boa quanto a comida.</p>
-                    </div>
-                    <div class="col-12 col-md-7">
-                        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Fine_Dining.jpg?width=700" alt="Ambiente do restaurante Ben Juan" class="about-img">
-                    </div>
+                <div class="about-text">
+                    <div class="eyebrow">Nossa História</div>
+                    <h2>Sobre o Ben Juan</h2>
+                </div>
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Fine_Dining.jpg?width=1600" alt="Ambiente do restaurante Ben Juan" class="about-img" decoding="async">
+                <div class="about-text about-copy">
+                    <p>O Ben Juan nasceu da vontade de servir uma cozinha cuidada, sem pressa, num ambiente
+                    que convida a ficar. Cada prato é preparado na hora, com ingredientes frescos e um toque
+                    contemporâneo em receitas clássicas. Seja um almoço em família, um jantar a dois ou uma
+                    comemoração, nossa equipe está por perto pra deixar tudo especial.</p>
                 </div>
             </div>
         </section>
@@ -790,10 +761,10 @@
         <section id="projetos">
             <div class="container">
                 <div class="menu-heading">
-                    <div class="eyebrow" data-i18n="eyebrowCardapio">Nosso Cardápio</div>
-                    <h2 data-i18n="menuTitle">Pratos preparados com cuidado</h2>
-                    <p data-i18n="menuSub">Uma seleção da nossa cozinha, pensada pra quem aprecia uma boa mesa.</p>
-                    <a class="btn-order btn-order-hero" href="#projetos" data-i18n="btnOrder">Peça Aqui</a>
+                    <div class="eyebrow">Nosso Cardápio</div>
+                    <h2>Pratos preparados com cuidado</h2>
+                    <p>Uma seleção da nossa cozinha, pensada pra quem aprecia uma boa mesa.</p>
+                    <a class="btn-order btn-order-hero" href="#projetos">Peça Aqui</a>
                 </div>
 
                 {% for categoria_valor, categoria_rotulo, itens in cardapio_por_categoria %}
@@ -802,8 +773,9 @@
                         <div class="menu-category-title">{{ categoria_rotulo }}</div>
                         <div class="row g-4">
                             {% for produto in itens %}
-                                <div class="col-6 col-lg-3">
-                                    <a href="{% url 'produto_detail' produto.slug %}" class="dish-link">
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    {% url 'produto_detail' produto.slug as produto_url %}
+                                    <a href="{% if user.is_authenticated %}{{ produto_url }}{% else %}{% url 'login' %}?next={{ produto_url|urlencode }}{% endif %}" class="dish-link">
                                         <div class="dish-card">
                                             <div class="dish-img-wrap">
                                                 {% if produto.foto %}
@@ -837,14 +809,14 @@
 
         <section id="contato">
             <div class="container contact-section">
-                <div class="eyebrow" data-i18n="eyebrowFale">Fale Conosco</div>
-                <h2 data-i18n="contactTitle">Vamos conversar?</h2>
-                <p data-i18n="contactP">Dúvidas, sugestões ou quer combinar algo especial pro seu evento? Chama a gente por aqui.</p>
+                <div class="eyebrow">Fale Conosco</div>
+                <h2>Vamos conversar?</h2>
+                <p>Dúvidas, sugestões ou quer combinar algo especial pro seu evento? Chama a gente por aqui.</p>
                 <div class="contact-socials">
-                    <a class="contact-social-link instagram" href="#" onclick="event.preventDefault(); alert(t('alertInstagram'));">
+                    <a class="contact-social-link instagram" href="#" onclick="event.preventDefault(); alert('Este é um site fictício, criado apenas para fins de demonstração/estudo. Não há Instagram real associado.');">
                         <i class="bi bi-instagram"></i> @benjuanrestaurant
                     </a>
-                    <a class="contact-social-link whatsapp" href="#" onclick="event.preventDefault(); alert(t('alertWhatsapp'));">
+                    <a class="contact-social-link whatsapp" href="#" onclick="event.preventDefault(); alert('Este é um site fictício, criado apenas para fins de demonstração/estudo. Não há WhatsApp real associado.');">
                         <i class="bi bi-whatsapp"></i> (00) 00000-0000
                     </a>
                 </div>
@@ -859,146 +831,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script>
-      const translations = {
-        pt: {
-          btnOrder: 'Peça Aqui',
-          navSobre: 'Sobre', navCardapio: 'Cardápio', navContato: 'Contato', navReservas: 'Reservas',
-          eyebrowHistoria: 'Nossa História',
-          aboutTitle: 'Sobre o Ben Juan',
-          aboutP1: 'O Ben Juan nasceu da vontade de servir uma cozinha cuidada, sem pressa, num ambiente que convida a ficar. Cada prato é preparado na hora, com ingredientes frescos e receitas que misturam técnica clássica com um toque contemporâneo.',
-          aboutP2: 'Mais do que um lugar pra comer bem, o Ben Juan é pensado pra ser um espaço de encontro — seja um almoço em família, um jantar a dois ou uma comemoração especial. Nossa equipe está sempre por perto pra garantir que sua experiência seja tão boa quanto a comida.',
-          eyebrowCardapio: 'Nosso Cardápio',
-          menuTitle: 'Pratos preparados com cuidado',
-          menuSub: 'Uma seleção da nossa cozinha, pensada pra quem aprecia uma boa mesa.',
-          catEntradas: 'Entradas', catPrincipais: 'Pratos Principais', catSobremesas: 'Sobremesas', catBebidas: 'Bebidas e Drinks',
-          d1t: 'Batata Frita com Cheddar e Bacon', d1d: 'Batata frita crocante coberta por cheddar derretido e bacon crocante, finalizada com um toque de ervas. Perfeita pra dividir e abrir o apetite.',
-          d2t: 'Bruschetta de Tomate', d2d: 'Fatias de pão italiano tostado, cobertas com tomate fresco, manjericão e um fio de azeite. Leve e cheia de sabor.',
-          d3t: 'Risoto da Casa', d3d: 'Risoto cremoso preparado lentamente, finalizado com ervas frescas e um fio de azeite.',
-          d4t: 'Seleção do Chef', d4d: 'Combinação sazonal escolhida pelo chef, com guarnições que mudam conforme a estação.',
-          d5t: 'Filé ao Molho da Casa', d5d: 'Corte nobre grelhado no ponto, acompanhado de molho reduzido e legumes salteados.',
-          d6t: 'Prato Especial do Chef', d6d: 'Uma criação autoral da casa, montada na hora e servida com toque contemporâneo.',
-          d7t: 'Talharim Negro aos Frutos do Mar', d7d: 'Massa preparada com tinta-de-lula, salteada com frutos do mar, alho e azeite. Visual marcante, sabor ainda mais intenso.',
-          d8t: 'Pizza de Calabresa', d8d: 'Massa fina e crocante, coberta com calabresa fatiada, cebola roxa e muçarela derretida. Assada na hora, direto pra sua mesa.',
-          d9t: 'Hambúrguer Artesanal', d9d: 'Blend de carnes nobres grelhado no ponto, queijo derretido, bacon e pão brioche tostado. Servido com acompanhamento da casa.',
-          d10t: 'Carne Grelhada', d10d: 'Corte selecionado, grelhado no ponto e servido em posta generosa. Sabor limpo, direto e sem frescura.',
-          d11t: 'Strogonoff', d11d: 'Strogonoff de carne cremoso, servido com arroz branco soltinho e batata palha crocante. Um clássico que nunca sai de moda.',
-          d12t: 'Bolo de Chocolate', d12d: 'Camadas úmidas de chocolate intenso, com cobertura cremosa e um leve toque amargo. Pra quem não abre mão de um chocolate de verdade.',
-          d13t: 'Bolo de Baunilha e Morango', d13d: 'Camadas leves de baunilha intercaladas com morangos frescos e chantilly. Doce na medida certa, elegante em cada garfada.',
-          d14t: 'Sorvete na Taça', d14d: 'Bolas de sorvete cremoso servidas em taça de vidro, com calda e cobertura à escolha. Um final refrescante pra fechar a refeição.',
-          d15t: 'Caipirinha de Limão', d15d: 'A clássica brasileira: cachaça, limão espremido na hora e açúcar, servida bem gelada. Simples e certeira.',
-          d16t: 'Gin Tropical', d16d: 'Gin premium com água tônica, gelo e um toque de frutas frescas da estação. Leve, aromático e refrescante.',
-          d17t: 'Cerveja Gelada', d17d: 'Long neck ou garrafa 600ml, sempre no gelo. Pergunte ao garçom pelas opções disponíveis do dia.',
-          d18t: 'Refrigerante Gelado', d18d: 'Coca-Cola, Guaraná ou água com gás, servidos bem gelados. Pergunte ao garçom pelas opções do dia.',
-          eyebrowFale: 'Fale Conosco',
-          contactTitle: 'Vamos conversar?',
-          contactP: 'Dúvidas, sugestões ou quer combinar algo especial pro seu evento? Chama a gente por aqui.',
-          alertInstagram: 'Este é um site fictício, criado apenas para fins de demonstração/estudo. Não há Instagram real associado.',
-          alertWhatsapp: 'Este é um site fictício, criado apenas para fins de demonstração/estudo. Não há WhatsApp real associado.'
-        },
-        en: {
-          btnOrder: 'Order Here',
-          navSobre: 'About', navCardapio: 'Menu', navContato: 'Contact', navReservas: 'Reservations',
-          eyebrowHistoria: 'Our Story',
-          aboutTitle: 'About Ben Juan',
-          aboutP1: 'Ben Juan was born from the desire to serve carefully crafted cuisine, without rushing, in a place that invites you to stay. Every dish is prepared on the spot, with fresh ingredients and recipes that blend classic technique with a contemporary touch.',
-          aboutP2: 'More than just a place to eat well, Ben Juan is designed to be a gathering space — whether it\'s a family lunch, a dinner for two, or a special celebration. Our team is always nearby to make sure your experience is as good as the food.',
-          eyebrowCardapio: 'Our Menu',
-          menuTitle: 'Dishes prepared with care',
-          menuSub: 'A selection from our kitchen, made for those who appreciate a good table.',
-          catEntradas: 'Starters', catPrincipais: 'Main Courses', catSobremesas: 'Desserts', catBebidas: 'Drinks & Cocktails',
-          d1t: 'Cheddar & Bacon Fries', d1d: 'Crispy fries covered in melted cheddar and crispy bacon, finished with a touch of herbs. Perfect for sharing and starting your appetite.',
-          d2t: 'Tomato Bruschetta', d2d: 'Slices of toasted Italian bread topped with fresh tomato, basil and a drizzle of olive oil. Light and full of flavor.',
-          d3t: 'House Risotto', d3d: 'Creamy risotto slowly prepared, finished with fresh herbs and a drizzle of olive oil.',
-          d4t: 'Chef\'s Selection', d4d: 'A seasonal combination chosen by the chef, with sides that change according to the season.',
-          d5t: 'Steak in House Sauce', d5d: 'Prime cut grilled to perfection, served with reduced sauce and sautéed vegetables.',
-          d6t: 'Chef\'s Special Dish', d6d: 'An original house creation, plated fresh and served with a contemporary touch.',
-          d7t: 'Black Seafood Tagliatelle', d7d: 'Pasta made with squid ink, sautéed with seafood, garlic and olive oil. Striking look, even more intense flavor.',
-          d8t: 'Pepperoni Pizza', d8d: 'Thin, crispy dough topped with sliced pepperoni, red onion and melted mozzarella. Baked fresh, straight to your table.',
-          d9t: 'Artisan Burger', d9d: 'Blend of prime meats grilled to perfection, melted cheese, bacon and toasted brioche bun. Served with the house side.',
-          d10t: 'Grilled Steak', d10d: 'Selected cut, grilled to perfection and served in a generous portion. Clean, straightforward flavor, no fuss.',
-          d11t: 'Stroganoff', d11d: 'Creamy beef stroganoff, served with fluffy white rice and crispy shoestring fries. A classic that never goes out of style.',
-          d12t: 'Chocolate Cake', d12d: 'Moist layers of intense chocolate, with creamy frosting and a slight bitter touch. For those who won\'t settle for anything less than real chocolate.',
-          d13t: 'Vanilla & Strawberry Cake', d13d: 'Light layers of vanilla layered with fresh strawberries and whipped cream. Just the right sweetness, elegant in every bite.',
-          d14t: 'Ice Cream in a Glass', d14d: 'Scoops of creamy ice cream served in a glass, with sauce and toppings of your choice. A refreshing way to end the meal.',
-          d15t: 'Lime Caipirinha', d15d: 'The Brazilian classic: cachaça, freshly squeezed lime and sugar, served ice cold. Simple and spot on.',
-          d16t: 'Tropical Gin', d16d: 'Premium gin with tonic water, ice and a touch of fresh seasonal fruit. Light, aromatic and refreshing.',
-          d17t: 'Cold Beer', d17d: 'Long neck or 600ml bottle, always on ice. Ask your server about the options available today.',
-          d18t: 'Cold Soda', d18d: 'Coca-Cola, Guaraná or sparkling water, served ice cold. Ask your server about today\'s options.',
-          eyebrowFale: 'Get In Touch',
-          contactTitle: 'Let\'s talk?',
-          contactP: 'Questions, suggestions, or want to plan something special for your event? Reach out to us here.',
-          alertInstagram: 'This is a fictional website, created only for demonstration/study purposes. There is no real Instagram associated with it.',
-          alertWhatsapp: 'This is a fictional website, created only for demonstration/study purposes. There is no real WhatsApp associated with it.'
-        },
-        es: {
-          btnOrder: 'Pide Aquí',
-          navSobre: 'Nosotros', navCardapio: 'Menú', navContato: 'Contacto', navReservas: 'Reservas',
-          eyebrowHistoria: 'Nuestra Historia',
-          aboutTitle: 'Sobre Ben Juan',
-          aboutP1: 'Ben Juan nació del deseo de servir una cocina cuidada, sin prisa, en un ambiente que invita a quedarse. Cada plato se prepara al momento, con ingredientes frescos y recetas que combinan la técnica clásica con un toque contemporáneo.',
-          aboutP2: 'Más que un lugar para comer bien, Ben Juan está pensado para ser un espacio de encuentro — ya sea un almuerzo en familia, una cena en pareja o una celebración especial. Nuestro equipo siempre está cerca para garantizar que tu experiencia sea tan buena como la comida.',
-          eyebrowCardapio: 'Nuestro Menú',
-          menuTitle: 'Platos preparados con cuidado',
-          menuSub: 'Una selección de nuestra cocina, pensada para quienes aprecian una buena mesa.',
-          catEntradas: 'Entradas', catPrincipais: 'Platos Principales', catSobremesas: 'Postres', catBebidas: 'Bebidas y Cócteles',
-          d1t: 'Papas Fritas con Cheddar y Bacon', d1d: 'Papas fritas crujientes cubiertas con cheddar derretido y bacon crujiente, terminadas con un toque de hierbas. Perfectas para compartir y abrir el apetito.',
-          d2t: 'Bruschetta de Tomate', d2d: 'Rebanadas de pan italiano tostado, cubiertas con tomate fresco, albahaca y un chorrito de aceite de oliva. Ligera y llena de sabor.',
-          d3t: 'Risotto de la Casa', d3d: 'Risotto cremoso preparado lentamente, terminado con hierbas frescas y un chorrito de aceite de oliva.',
-          d4t: 'Selección del Chef', d4d: 'Combinación de temporada elegida por el chef, con guarniciones que cambian según la estación.',
-          d5t: 'Filete en Salsa de la Casa', d5d: 'Corte noble asado al punto, acompañado de salsa reducida y verduras salteadas.',
-          d6t: 'Plato Especial del Chef', d6d: 'Una creación de autor de la casa, montada al momento y servida con un toque contemporáneo.',
-          d7t: 'Tallarín Negro con Frutos del Mar', d7d: 'Pasta preparada con tinta de calamar, salteada con frutos del mar, ajo y aceite de oliva. Aspecto llamativo, sabor aún más intenso.',
-          d8t: 'Pizza de Pepperoni', d8d: 'Masa fina y crujiente, cubierta con pepperoni en rodajas, cebolla morada y mozzarella derretida. Horneada al momento, directo a tu mesa.',
-          d9t: 'Hamburguesa Artesanal', d9d: 'Mezcla de carnes nobles asada al punto, queso derretido, bacon y pan brioche tostado. Servida con guarnición de la casa.',
-          d10t: 'Carne Asada', d10d: 'Corte seleccionado, asado al punto y servido en porción generosa. Sabor limpio, directo y sin artificios.',
-          d11t: 'Strogonoff', d11d: 'Strogonoff de carne cremoso, servido con arroz blanco suelto y papas paja crujientes. Un clásico que nunca pasa de moda.',
-          d12t: 'Torta de Chocolate', d12d: 'Capas húmedas de chocolate intenso, con cobertura cremosa y un leve toque amargo. Para quienes no renuncian a un chocolate de verdad.',
-          d13t: 'Torta de Vainilla y Fresa', d13d: 'Capas ligeras de vainilla intercaladas con fresas frescas y chantillí. Dulzura justa, elegante en cada bocado.',
-          d14t: 'Helado en Copa', d14d: 'Bolas de helado cremoso servidas en copa de vidrio, con salsa y cobertura a elección. Un final refrescante para cerrar la comida.',
-          d15t: 'Caipirinha de Limón', d15d: 'La clásica brasileña: cachaza, limón recién exprimido y azúcar, servida bien fría. Simple y certera.',
-          d16t: 'Gin Tropical', d16d: 'Gin premium con agua tónica, hielo y un toque de frutas frescas de temporada. Ligero, aromático y refrescante.',
-          d17t: 'Cerveza Fría', d17d: 'Long neck o botella de 600ml, siempre con hielo. Pregunta al mesero por las opciones disponibles del día.',
-          d18t: 'Refresco Frío', d18d: 'Coca-Cola, Guaraná o agua con gas, servidos bien fríos. Pregunta al mesero por las opciones del día.',
-          eyebrowFale: 'Contáctanos',
-          contactTitle: '¿Hablamos?',
-          contactP: '¿Dudas, sugerencias o quieres organizar algo especial para tu evento? Escríbenos por aquí.',
-          alertInstagram: 'Este es un sitio ficticio, creado solo con fines de demostración/estudio. No hay un Instagram real asociado.',
-          alertWhatsapp: 'Este es un sitio ficticio, creado solo con fines de demostración/estudio. No hay un WhatsApp real asociado.'
-        }
-      };
-
-      let currentLang = 'pt';
-
-      function t(key){
-        return (translations[currentLang] && translations[currentLang][key]) || translations.pt[key] || key;
-      }
-
-      function applyLanguage(lang){
-        currentLang = translations[lang] ? lang : 'pt';
-        document.querySelectorAll('[data-i18n]').forEach(function(el){
-          el.textContent = t(el.dataset.i18n);
-        });
-      }
-
-      function toggleNavLangMenu(event){
-        if(event) event.stopPropagation();
-        document.getElementById('navLangMenu').classList.toggle('open');
-      }
-
-      function setNavLang(lang, el){
-        document.querySelectorAll('#navLangMenu .lang-option').forEach(o => o.classList.remove('active'));
-        if(el) el.classList.add('active');
-        document.getElementById('navLangMenu').classList.remove('open');
-        applyLanguage(lang);
-      }
-
-      document.addEventListener('click', function(e){
-        const menu = document.getElementById('navLangMenu');
-        if(menu && menu.classList.contains('open') && !menu.contains(e.target)){
-          menu.classList.remove('open');
-        }
-      });
-
       (function(){
         const header = document.querySelector('header');
         if(!header) return;
@@ -1055,4 +887,4 @@
       });
     </script>
 </body>
-</html>
+</html>   

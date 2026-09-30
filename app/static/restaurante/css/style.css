@@ -53,3 +53,292 @@
 .navbar-toggler-icon{
   filter: invert(1) grayscale(1) brightness(2);
 }
+
+/* ===== BARRA INFERIOR MOBILE (Início / Reservas / Pedidos) =====
+   Só aparece abaixo de 992px. No desktop o site continua igual. */
+.bottom-nav{ display: none; }
+
+@media (max-width: 991.98px){
+  body.has-bottom-nav{
+    padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px));
+  }
+  .bottom-nav{
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1040;
+    background: var(--navy-deep);
+    border-top: 1px solid var(--border);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .bottom-nav-item{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 9px 4px 8px;
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    transition: color .15s ease;
+  }
+  .bottom-nav-item i{ font-size: 22px; line-height: 1; }
+  .bottom-nav-item.active,
+  .bottom-nav-item:hover{ color: var(--navy); }
+}
+
+
+/* ===== NAVBAR RESPONSIVA + PAINEL DE CONTA (mobile) =====
+   Usado pelo partial _navbar.html (todas as páginas). */
+.mobile-account .btn-order,
+.mobile-panel-cta .btn-order{
+  background: var(--navy);
+  color: var(--navy-deep) !important;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 10px 20px !important;
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+  /* ---------- Navbar fixa ---------- */
+  header{
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    transition: box-shadow .2s ease;
+  }
+  header.is-scrolled{
+    box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+  }
+
+  /* ---------- Ajustes de layout da navbar ---------- */
+  .navbar > .container-fluid{
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+  }
+  .navbar-brand{
+    white-space: nowrap;
+    min-width: 0;
+  }
+  .navbar-brand .brand-full{
+    display: none;
+  }
+  .navbar-brand .brand-short{
+    display: inline;
+  }
+  @media (min-width: 992px){
+    .navbar-brand .brand-full{
+      display: inline;
+    }
+    .navbar-brand .brand-short{
+      display: none;
+    }
+  }
+  .navbar-toggler{
+    flex-shrink: 0;
+  }
+  .mobile-menu-backdrop{
+    display: none;
+  }
+
+  /* ---------- Conta no mobile ---------- */
+  .mobile-account{
+    padding-bottom: 18px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .account-head{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .account-avatar{
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--navy-deep);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .account-name,
+  .account-title{
+    font-family: 'Poppins', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.25;
+  }
+  .account-sub{
+    font-size: 13px;
+    color: var(--muted);
+    word-break: break-all;
+  }
+  .account-btn{
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .account-btn-outline{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--navy);
+    border: 1px solid var(--navy);
+    border-radius: 999px;
+    padding: 10px 20px;
+    text-decoration: none;
+  }
+  .account-logout{
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    color: var(--coral);
+  }
+  .account-logout i{ color: var(--coral) !important; }
+  .navbar-toggler{ margin-left: auto; }
+
+  /* ---------- Navbar desktop: nav central ---------- */
+  @media (min-width: 992px){
+    .navbar-collapse{
+      align-items: center;
+      gap: 18px;
+    }
+  }
+
+  /* ---------- Painel de conta no mobile (ícone de perfil no topo) ---------- */
+  /* Painel lateral (drawer), com o resto da página escurecido atrás —
+     igual ao padrão de apps nativos/grandes e-commerces. */
+  @media (max-width: 991.98px){
+    body.mobile-menu-open{
+      overflow: hidden;
+    }
+
+    .mobile-menu-backdrop{
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 1990;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .28s ease, visibility 0s linear .28s;
+    }
+    .mobile-menu-backdrop.mobile-open{
+      opacity: 1;
+      visibility: visible;
+      transition: opacity .28s ease, visibility 0s linear 0s;
+    }
+
+    #navbarSupportedContent.navbar-collapse{
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: auto;
+      width: 84%;
+      max-width: 400px;
+      height: 100dvh;
+      margin: 0;
+      background: var(--card);
+      border-radius: 18px 0 0 18px;
+      box-shadow: -18px 0 50px rgba(0,0,0,0.4);
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 26px 24px 28px;
+      overflow-y: auto;
+      transform: translateX(100%);
+      visibility: hidden;
+      transition: transform .34s cubic-bezier(.4,0,.2,1), visibility 0s linear .34s;
+    }
+    #navbarSupportedContent.navbar-collapse.mobile-open{
+      transform: translateX(0);
+      visibility: visible;
+      transition: transform .34s cubic-bezier(.4,0,.2,1), visibility 0s linear 0s;
+    }
+
+    /* lista principal — itens grandes, com seta, tipo app nativo */
+    #navbarSupportedContent .navbar-nav{
+      gap: 0;
+    }
+    #navbarSupportedContent .navbar-nav .nav-item{
+      border-bottom: 1px solid var(--border);
+    }
+    #navbarSupportedContent .navbar-nav .nav-link{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 21px;
+      font-weight: 600;
+      padding: 16px 2px !important;
+    }
+    #navbarSupportedContent .navbar-nav .nav-link::after{
+      content: "\203A";
+      font-size: 24px;
+      font-weight: 400;
+      color: var(--muted);
+      margin-left: 10px;
+    }
+
+    /* rodapé do painel — atalhos secundários, tipo "acompanhe seu pedido" */
+    .mobile-panel-extra{
+      margin-top: auto;
+      padding-top: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .mobile-extra-link{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 11px 2px;
+    }
+    .mobile-extra-link i{
+      font-size: 18px;
+      width: 20px;
+      text-align: center;
+      color: var(--navy);
+    }
+    .mobile-panel-cta{
+      margin-top: 14px;
+    }
+    .mobile-panel-cta .btn-order{
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+
+    .navbar-toggler{
+      position: relative;
+      z-index: 2010;
+    }
+    #mobileMenuIcon{
+      font-size: 24px;
+      line-height: 1;
+      color: var(--ink);
+    }
+  }

@@ -1,21 +1,33 @@
 """
 Configurações do projeto Ben Juan Restaurant (Django).
 
-Gerado para reaproveitar o site estático (HTML/CSS/JS puro) como
-templates + arquivos estáticos dentro de um projeto Django, servindo
-para portfólio.
+Site de restaurante com cardápio, carrinho, reservas e login de clientes,
+feito para portfólio.
 """
 
+import os
 from pathlib import Path
+
+from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ATENÇÃO: troque essa chave antes de colocar em produção.
-SECRET_KEY = "django-insecure-troque-esta-chave-antes-de-publicar"
+# Desenvolvimento: funciona sem configurar nada (DEBUG ligado).
+# Produção: defina as variáveis de ambiente abaixo.
+#   DJANGO_DEBUG=0
+#   DJANGO_SECRET_KEY=<chave longa e aleatória>
+#   DJANGO_ALLOWED_HOSTS=meusite.com,www.meusite.com
+_DEV_SECRET_KEY = "django-insecure-troque-esta-chave-antes-de-publicar"
 
-# Em produção, coloque DEBUG = False e preencha ALLOWED_HOSTS.
-DEBUG = True
-ALLOWED_HOSTS = ["*"]
+DEBUG = os.environ.get("DJANGO_DEBUG", "1") == "1"
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", _DEV_SECRET_KEY)
+
+if DEBUG:
+    ALLOWED_HOSTS = ["*"]
+else:
+    ALLOWED_HOSTS = [h.strip() for h in os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",") if h.strip()]
+    if SECRET_KEY == _DEV_SECRET_KEY:
+        raise ImproperlyConfigured("Defina DJANGO_SECRET_KEY para rodar com DEBUG desligado.")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -43,8 +55,8 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        # Não precisamos listar 'DIRS' pois cada app tem sua própria
-        # pasta templates/ (restaurante/templates/restaurante/...)
+        # Não precisamos listar 'DIRS': o Django procura na pasta
+        # templates/ de cada app instalado (app/templates/app/...).
         "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -60,9 +72,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# Banco de dados (SQLite só porque o Django exige um; o site não usa
-# nenhuma tabela — tudo continua simulado no front-end, como no projeto
-# original).
+# Banco de dados: SQLite (suficiente para portfólio/desenvolvimento).
+# Guarda usuários, cardápio, pedidos e reservas. Depois de baixar o projeto
+# ou mudar os models, rode: python manage.py migrate
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -94,6 +106,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+# ---- Autenticação ----
+# LOGIN_URL: para onde o @login_required / LoginRequiredMixin mandam quem
+# não está logado. Os outros dois definem o destino após entrar e sair.
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "index"
 LOGOUT_REDIRECT_URL = "index"

@@ -1,8 +1,10 @@
 import json
+from functools import wraps
 
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.db import IntegrityError
 from django.http import JsonResponse
@@ -14,6 +16,17 @@ from django.views.generic import DetailView, TemplateView
 from .models import ItemCardapio, ItemPedido, Pedido, Reserva
 
 CARRINHO_SESSION_KEY = "carrinho"
+
+
+def api_login_required(view):
+    """Como o login_required, mas para endpoints JSON: em vez de redirecionar
+    para a página de login (HTML), responde 401 com uma mensagem em JSON."""
+    @wraps(view)
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return JsonResponse({"erro": "Faça login para continuar."}, status=401)
+        return view(request, *args, **kwargs)
+    return wrapper
 
 
 # ---------------------------------------------------------------------------
@@ -33,11 +46,11 @@ class IndexView(TemplateView):
         return context
 
 
-class ReservaView(TemplateView):
+class ReservaView(LoginRequiredMixin, TemplateView):
     template_name = "app/reserva.html"
 
 
-class ProdutoDetailView(DetailView):
+class ProdutoDetailView(LoginRequiredMixin, DetailView):
     model = ItemCardapio
     template_name = "app/produto_detail.html"
     context_object_name = "produto"
@@ -105,6 +118,7 @@ def _carrinho_detalhado(request):
     return itens, total
 
 
+@login_required
 @require_POST
 def carrinho_adicionar(request, slug):
     produto = get_object_or_404(ItemCardapio, slug=slug)
@@ -123,6 +137,7 @@ def carrinho_adicionar(request, slug):
     return redirect("carrinho_ver")
 
 
+@login_required
 def carrinho_ver(request):
     itens, total = _carrinho_detalhado(request)
     return render(request, "app/carrinho.html", {
@@ -132,6 +147,7 @@ def carrinho_ver(request):
     })
 
 
+@login_required
 @require_POST
 def carrinho_remover(request, slug):
     carrinho = _get_carrinho(request)
@@ -197,6 +213,7 @@ def api_cardapio(request):
     return JsonResponse({"itens": data})
 
 
+@api_login_required
 @require_http_methods(["POST"])
 def api_estoque_toggle(request, item_id):
     item = get_object_or_404(ItemCardapio, slug=item_id)
@@ -209,11 +226,13 @@ def api_estoque_toggle(request, item_id):
 # API — Pedidos
 # ---------------------------------------------------------------------------
 
+@api_login_required
 def api_pedidos_list(request):
     pedidos = Pedido.objects.filter(excluido=False)
     return JsonResponse({"pedidos": [p.as_dict() for p in pedidos]})
 
 
+@api_login_required
 @require_http_methods(["POST"])
 def api_pedidos_create(request):
     try:
@@ -253,6 +272,7 @@ def api_pedidos_create(request):
     return JsonResponse(pedido.as_dict(), status=201)
 
 
+@api_login_required
 @require_http_methods(["POST"])
 def api_pedido_avancar(request, pedido_id):
     pedido = get_object_or_404(Pedido, pk=pedido_id)
@@ -262,6 +282,7 @@ def api_pedido_avancar(request, pedido_id):
     return JsonResponse(pedido.as_dict())
 
 
+@api_login_required
 @require_http_methods(["POST"])
 def api_pedido_pagamento(request, pedido_id):
     pedido = get_object_or_404(Pedido, pk=pedido_id)
@@ -271,6 +292,7 @@ def api_pedido_pagamento(request, pedido_id):
     return JsonResponse(pedido.as_dict())
 
 
+@api_login_required
 @require_http_methods(["POST"])
 def api_pedido_excluir(request, pedido_id):
     pedido = get_object_or_404(Pedido, pk=pedido_id)
@@ -280,6 +302,7 @@ def api_pedido_excluir(request, pedido_id):
     return JsonResponse(pedido.as_dict())
 
 
+@api_login_required
 @require_http_methods(["POST"])
 def api_pedido_restaurar(request, pedido_id):
     pedido = get_object_or_404(Pedido, pk=pedido_id)
@@ -289,6 +312,7 @@ def api_pedido_restaurar(request, pedido_id):
     return JsonResponse(pedido.as_dict())
 
 
+@api_login_required
 @require_http_methods(["POST"])
 def api_pedido_apagar(request, pedido_id):
     pedido = get_object_or_404(Pedido, pk=pedido_id)
@@ -300,11 +324,13 @@ def api_pedido_apagar(request, pedido_id):
 # API — Reservas
 # ---------------------------------------------------------------------------
 
+@api_login_required
 def api_reservas_list(request):
     reservas = Reserva.objects.filter(excluido=False)
     return JsonResponse({"reservas": [r.as_dict() for r in reservas]})
 
 
+@api_login_required
 @require_http_methods(["POST"])
 def api_reservas_create(request):
     try:
@@ -339,6 +365,7 @@ def api_reservas_create(request):
     return JsonResponse(reserva.as_dict(), status=201)
 
 
+@api_login_required
 @require_http_methods(["POST"])
 def api_reserva_excluir(request, reserva_id):
     reserva = get_object_or_404(Reserva, pk=reserva_id)
@@ -348,6 +375,7 @@ def api_reserva_excluir(request, reserva_id):
     return JsonResponse(reserva.as_dict())
 
 
+@api_login_required
 @require_http_methods(["POST"])
 def api_reserva_restaurar(request, reserva_id):
     reserva = get_object_or_404(Reserva, pk=reserva_id)
@@ -357,6 +385,7 @@ def api_reserva_restaurar(request, reserva_id):
     return JsonResponse(reserva.as_dict())
 
 
+@api_login_required
 @require_http_methods(["POST"])
 def api_reserva_apagar(request, reserva_id):
     reserva = get_object_or_404(Reserva, pk=reserva_id)
