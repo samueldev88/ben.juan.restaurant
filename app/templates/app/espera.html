@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Lista de espera — Ben Juan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link href="{% static 'restaurante/css/style.css' %}" rel="stylesheet">
+</head>
+<body class="pg-reserva">
+
+<div class="phone">
+
+  {% include 'app/_topo.html' %}
+
+  <div class="reserve-card">
+    <div class="reserve-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+    </div>
+    <div>
+      <div class="reserve-text-title">Entrar na lista de espera</div>
+      <div class="reserve-text-sub">Avisamos quando sua mesa estiver pronta</div>
+    </div>
+  </div>
+
+  <div class="form-block">
+
+    <div class="form-field">
+      <div class="field-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      </div>
+      <div class="field-texts">
+        <div class="field-label">Nome completo</div>
+        <input type="text" id="nome" placeholder="Digite seu nome completo" autocomplete="name">
+      </div>
+    </div>
+
+    <div class="form-field">
+      <div class="field-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L8.1 9.9a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.4c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z"/></svg>
+      </div>
+      <div class="field-texts">
+        <div class="field-label">Telefone</div>
+        <input type="tel" id="telefone" inputmode="tel" placeholder="(21) 99999-9999" autocomplete="tel">
+      </div>
+    </div>
+
+    <div class="form-field">
+      <div class="field-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      </div>
+      <div class="field-texts">
+        <div class="field-label">Horário</div>
+        <select id="horario">
+          <option value="">Selecione</option>
+          <option>10:00</option><option>11:00</option><option>12:00</option>
+          <option>13:00</option><option>14:00</option><option>15:00</option>
+          <option>16:00</option><option>17:00</option><option>18:00</option>
+          <option>19:00</option><option>20:00</option><option>21:00</option>
+          <option>22:00</option>
+        </select>
+      </div>
+      <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+    </div>
+
+    <div class="form-field" style="border-bottom:none;">
+      <div class="field-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5"/><path d="M16 4.7a3.5 3.5 0 010 6.6M18 13.8c2.3.7 3.5 2.7 3.5 5.2"/></svg>
+      </div>
+      <div class="field-texts">
+        <div class="field-label">Pessoas</div>
+        <select id="pessoas">
+          <option value="">Selecione</option>
+          <option value="1 pessoa">1 pessoa</option>
+          <option value="2 pessoas">2 pessoas</option>
+          <option value="3 pessoas">3 pessoas</option>
+          <option value="4 pessoas">4 pessoas</option>
+          <option value="5 pessoas">5 pessoas</option>
+          <option value="6 pessoas">6 pessoas</option>
+          <option value="7 ou mais">7 ou mais</option>
+        </select>
+      </div>
+      <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+    </div>
+
+  </div>
+
+  <div class="policy-note">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+    <div class="policy-note-text">Quando uma mesa liberar, entramos em contato pelo <strong>telefone informado</strong>. Fique de olho no celular.</div>
+  </div>
+
+  <div class="continue-btn disabled" id="continueBtn">Entrar na lista</div>
+
+  <div class="footer-note">A lista de espera vale para o dia de hoje. Obrigado pela preferência.</div>
+
+</div>
+
+<div class="badge" id="badge"></div>
+
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-card">
+    <div class="confirm-emoji">✅</div>
+    <div class="confirm-title">Você está na lista!</div>
+    <div class="confirm-sub">Assim que sua mesa estiver pronta, avisamos pelo telefone informado.</div>
+    <div class="confirm-close-btn" id="confirmCloseBtn">Combinado!</div>
+  </div>
+</div>
+
+<script>
+  const $ = id => document.getElementById(id);
+  const nomeEl = $('nome'), telEl = $('telefone'), horarioEl = $('horario'), pessoasEl = $('pessoas');
+  const btn = $('continueBtn');
+
+  function showBadge(text, type){
+    const b = $('badge');
+    b.textContent = text;
+    b.classList.remove('error', 'success');
+    if(type) b.classList.add(type);
+    b.classList.add('show');
+    clearTimeout(window._t);
+    window._t = setTimeout(() => b.classList.remove('show'), 2400);
+  }
+
+  // Máscara (21) 99999-9999 — aceita fixo (10 dígitos) e celular (11)
+  telEl.addEventListener('input', function(){
+    const d = this.value.replace(/\D/g, '').slice(0, 11);
+    const corte = d.length > 10 ? 7 : 6;
+    this.value = d.length > corte ? `(${d.slice(0,2)}) ${d.slice(2, corte)}-${d.slice(corte)}`
+               : d.length > 2 ? `(${d.slice(0,2)}) ${d.slice(2)}` : d;
+    atualizar();
+  });
+
+  const digitos = () => telEl.value.replace(/\D/g, '');
+  const completo = () => nomeEl.value.trim() && [10, 11].includes(digitos().length) && horarioEl.value && pessoasEl.value;
+  function atualizar(){ btn.classList.toggle('disabled', !completo()); }
+  [nomeEl, horarioEl, pessoasEl].forEach(el => el.addEventListener('input', atualizar));
+
+  // Site de demonstração: valida e mostra a confirmação, sem salvar nada.
+  btn.addEventListener('click', function(){
+    if(!nomeEl.value.trim()){ showBadge('Informe seu nome completo', 'error'); return; }
+    if(![10, 11].includes(digitos().length)){ showBadge('Informe um telefone válido com DDD', 'error'); return; }
+    if(!horarioEl.value){ showBadge('Selecione o horário', 'error'); return; }
+    if(!pessoasEl.value){ showBadge('Selecione o número de pessoas', 'error'); return; }
+
+    $('confirmOverlay').classList.add('show');
+    nomeEl.value = telEl.value = horarioEl.value = pessoasEl.value = '';
+    atualizar();
+  });
+
+  const fechar = () => $('confirmOverlay').classList.remove('show');
+  $('confirmCloseBtn').addEventListener('click', fechar);
+  $('confirmOverlay').addEventListener('click', e => { if(e.target === $('confirmOverlay')) fechar(); });
+</script>
+
+</body>
+</html>

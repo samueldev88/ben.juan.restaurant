@@ -342,3 +342,232 @@
       color: var(--ink);
     }
   }
+  /* =========================================================
+   PÁGINAS DE RESERVA (servicos, reserva mesa, lista de espera)
+   Vale só nas páginas que incluem o _topo.html (que tem o .brand__mark),
+   então não afeta a index nem o pedidos. Não precisa de classe no <body>.
+   ========================================================= */
+body:where(:has(.brand__mark)) *{box-sizing:border-box; margin:0; padding:0;
+}
+body:has(.brand__mark){
+    background: var(--cream);
+    font-family:'DM Sans', sans-serif;
+    color: var(--ink);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    overflow-x:hidden;
+}
+body:has(.brand__mark) .phone{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    background: var(--cream);
+    position:relative;
+    padding-bottom:60px;
+}
+body:has(.brand__mark) .reserve-card{
+    margin: 18px 20px 0;
+    background: var(--card);
+    border-radius: 14px;
+    padding: 16px;
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    border: 1px solid var(--border);
+}
+body:has(.brand__mark) .reserve-icon{
+    width:38px; height:38px;
+    border-radius:10px;
+    background: rgba(201,162,77,0.18);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+}
+body:has(.brand__mark) .reserve-icon svg{width:19px; height:19px; color: var(--navy);
+}
+body:has(.brand__mark) .reserve-text-title{ font-weight:600; font-size: 15.5px; color: var(--ink);
+}
+body:has(.brand__mark) .reserve-text-sub{ font-size: 12.8px; color: var(--muted); margin-top: 1px;
+}
+body:has(.brand__mark) .form-block{ margin: 22px 20px 0;
+}
+body:has(.brand__mark) .form-field{
+    display:flex;
+    align-items:center;
+    gap: 14px;
+    padding: 16px 4px;
+    border-bottom: 1px solid var(--border);
+    cursor:pointer;
+    transition: opacity .2s ease;
+}
+body:has(.brand__mark) .form-field.locked{ opacity:0.42; pointer-events:none; cursor:not-allowed;
+}
+body:has(.brand__mark) .form-field.date-field{ position: relative;
+}
+body:has(.brand__mark) .field-icon{
+    width:30px; height:30px;
+    display:flex; align-items:center; justify-content:center;
+    color: var(--navy);
+    flex-shrink:0;
+}
+body:has(.brand__mark) .field-icon svg{width:22px; height:22px;
+}
+body:has(.brand__mark) .field-texts{ flex:1;
+}
+body:has(.brand__mark) .field-label{ font-weight:600; font-size: 15.5px; color: var(--ink);
+}
+body:has(.brand__mark) .field-value{ font-size: 13.5px; color: var(--muted); margin-top: 2px;
+}
+body:has(.brand__mark) .field-value.filled{ color: var(--navy);
+}
+body:has(.brand__mark) .chevron{ color: var(--muted);
+}
+body:has(.brand__mark) .chevron svg{width:16px; height:16px;
+}
+body:has(.brand__mark) select,
+body:has(.brand__mark) textarea,
+body:has(.brand__mark) input[type="text"],
+body:has(.brand__mark) input[type="tel"]{
+    border:none;
+    background:transparent;
+    font-family:'DM Sans', sans-serif;
+    font-size: 13.5px;
+    color: var(--navy);
+    width:100%;
+    outline:none;
+    padding-top:2px;
+}
+body:has(.brand__mark) input[type="text"]::placeholder,
+body:has(.brand__mark) input[type="tel"]::placeholder,
+body:has(.brand__mark) textarea::placeholder{ color: var(--muted);
+}
+body:has(.brand__mark) textarea{ resize:none; font-size: 14px; color: var(--ink);
+}
+body:has(.brand__mark) select option{ color:#222;
+}
+body:has(.brand__mark) select option:disabled{ color:#999;
+}
+body:has(.brand__mark) .date-overlay-input{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    opacity:0; border:0; margin:0; padding:0;
+    cursor:pointer;
+    -webkit-appearance:none; appearance:none;
+}
+body:has(.brand__mark) .form-field.locked .date-overlay-input{ pointer-events:none;
+}
+body:has(.brand__mark) .policy-note{
+    margin: 18px 20px 0;
+    background: rgba(200,134,46,0.10);
+    border: 1px solid rgba(200,134,46,0.35);
+    border-left: 4px solid var(--amber, #c8862e);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display:flex;
+    align-items:flex-start;
+    gap: 10px;
+}
+body:has(.brand__mark) .policy-note svg{ width:18px; height:18px; color: var(--amber, #c8862e); flex-shrink:0; margin-top:1px;
+}
+body:has(.brand__mark) .policy-note-text{ font-size: 12.8px; line-height:1.5; color: var(--ink);
+}
+body:has(.brand__mark) .policy-note-text strong{ color: var(--amber, #c8862e);
+}
+body:has(.brand__mark) .continue-btn{
+    margin: 26px 20px 0;
+    background: var(--coral);
+    color:#fff;
+    text-align:center;
+    padding: 16px;
+    border-radius: 14px;
+    font-weight:700;
+    font-size: 16px;
+    cursor:pointer;
+    box-shadow: 0 8px 18px rgba(216,80,60,0.3);
+    user-select:none;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity .2s ease, box-shadow .2s ease;
+}
+body:has(.brand__mark) .continue-btn.disabled{ opacity: 0.42; box-shadow:none; cursor:not-allowed;
+}
+body:has(.brand__mark) .continue-btn.loading{ opacity: 0.7; cursor:wait;
+}
+body:has(.brand__mark) .footer-note{
+    text-align:center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 20px;
+    padding: 0 30px;
+    line-height:1.5;
+}
+body:has(.brand__mark) .badge{
+    position:fixed;
+    bottom: 14px;
+    left:50%;
+    transform: translateX(-50%);
+    background: var(--card);
+    color: var(--ink);
+    font-size: 11.5px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity .2s ease, transform .2s ease;
+    white-space:nowrap;
+    max-width: 90vw;
+    text-align:center;
+    border: 1px solid var(--border);
+}
+body:has(.brand__mark) .badge.show{ opacity:1; transform: translateX(-50%) translateY(-6px);
+}
+body:has(.brand__mark) .badge.error{ background: var(--coral);
+}
+body:has(.brand__mark) .badge.success{ background: #4a8a5f;
+}
+body:has(.brand__mark) .confirm-overlay{
+    position:fixed; inset:0;
+    background: rgba(0,0,0,0.7);
+    display:flex; align-items:center; justify-content:center;
+    padding: 24px;
+    z-index: 500;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity .25s ease;
+}
+body:has(.brand__mark) .confirm-overlay.show{ opacity:1; pointer-events:auto;
+}
+body:has(.brand__mark) #confettiCanvas{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none;
+}
+body:has(.brand__mark) .confirm-card{
+    position:relative;
+    background: var(--card);
+    border-radius: 20px;
+    padding: 32px 26px 26px;
+    max-width: 340px;
+    width:100%;
+    text-align:center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    transform: scale(0.85) translateY(10px);
+    opacity:0;
+    transition: transform .3s ease, opacity .3s ease;
+}
+body:has(.brand__mark) .confirm-overlay.show .confirm-card{ transform: scale(1) translateY(0); opacity:1;
+}
+body:has(.brand__mark) .confirm-emoji{ font-size: 44px; margin-bottom: 8px;
+}
+body:has(.brand__mark) .confirm-title{ font-size: 21px; font-weight:700; color: var(--ink); margin-bottom: 8px;
+}
+body:has(.brand__mark) .confirm-sub{ font-size: 14px; color: var(--muted); line-height:1.5; margin-bottom: 22px;
+}
+body:has(.brand__mark) .confirm-close-btn{
+    background: var(--coral);
+    color:#fff;
+    font-weight:700;
+    font-size: 14.5px;
+    padding: 13px;
+    border-radius: 12px;
+    cursor:pointer;
+    user-select:none;
+    -webkit-tap-highlight-color: transparent;
+}

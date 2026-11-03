@@ -1,17 +1,13 @@
-from django.contrib.auth import views as auth_views
 from django.urls import path
 
 from . import views
 
 urlpatterns = [
-    # Páginas
+    # Páginas (todas públicas)
     path("", views.IndexView.as_view(), name="index"),
-    path("reserva/", views.ReservaView.as_view(), name="reserva"),
-
-    # Autenticação
-    path("login/", auth_views.LoginView.as_view(template_name="app/login.html"), name="login"),
-    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
-    path("cadastro/", views.cadastro, name="cadastro"),
+    path('reserva/', views.ServicosView.as_view(), name='reserva'),
+    path('reserva/mesa/', views.ReservaView.as_view(), name='reserva_mesa'),
+    path('reserva/espera/', views.EsperaView.as_view(), name='reserva_espera'),
 
     # Produto / Carrinho
     path("produto/<slug:slug>/", views.ProdutoDetailView.as_view(), name="produto_detail"),
@@ -23,7 +19,7 @@ urlpatterns = [
     # API — cardápio
     path("api/cardapio/", views.api_cardapio, name="api_cardapio"),
     path("api/estoque/<str:item_id>/", views.api_estoque_toggle, name="api_estoque_toggle"),
-    # API — pedidos
+    # API — pedidos (equipe)
     path("api/pedidos/", views.api_pedidos_list, name="api_pedidos_list"),
     path("api/pedidos/novo/", views.api_pedidos_create, name="api_pedidos"),
     path("api/pedidos/<int:pedido_id>/avancar/", views.api_pedido_avancar, name="api_pedido_avancar"),

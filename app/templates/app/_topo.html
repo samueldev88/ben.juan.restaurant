@@ -1,0 +1,333 @@
+<style>
+  /* Base compartilhada das páginas de reserva (mesa e lista de espera). Paleta vem de style.css */
+  html{-webkit-text-size-adjust:100%;}
+  body *{box-sizing:border-box; margin:0; padding:0;}
+
+  body{
+    background: var(--cream);
+    font-family:'DM Sans', sans-serif;
+    color: var(--ink);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    overflow-x:hidden;
+  }
+
+  .phone{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    background: var(--cream);
+    position:relative;
+    padding-bottom:60px;
+  }
+
+  .reserve-card{
+    margin: 18px 20px 0;
+    background: var(--card);
+    border-radius: 14px;
+    padding: 16px;
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    border: 1px solid var(--border);
+  }
+  .reserve-icon{
+    width:38px; height:38px;
+    border-radius:10px;
+    background: rgba(201,162,77,0.18);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .reserve-icon svg{width:19px; height:19px; color: var(--navy);}
+  .reserve-text-title{ font-weight:600; font-size: 15.5px; color: var(--ink); }
+  .reserve-text-sub{ font-size: 12.8px; color: var(--muted); margin-top: 1px; }
+
+  /* ---------- Formulário ---------- */
+  .form-block{ margin: 22px 20px 0; }
+  .form-field{
+    display:flex;
+    align-items:center;
+    gap: 14px;
+    padding: 16px 4px;
+    border-bottom: 1px solid var(--border);
+    cursor:pointer;
+    transition: opacity .2s ease;
+  }
+  .form-field.locked{ opacity:0.42; pointer-events:none; cursor:not-allowed; }
+  .form-field.date-field{ position: relative; }
+
+  .field-icon{
+    width:30px; height:30px;
+    display:flex; align-items:center; justify-content:center;
+    color: var(--navy);
+    flex-shrink:0;
+  }
+  .field-icon svg{width:22px; height:22px;}
+  .field-texts{ flex:1; }
+  .field-label{ font-weight:600; font-size: 15.5px; color: var(--ink); }
+  .field-value{ font-size: 13.5px; color: var(--muted); margin-top: 2px; }
+  .field-value.filled{ color: var(--navy); }
+  .chevron{ color: var(--muted); }
+  .chevron svg{width:16px; height:16px;}
+
+  select, textarea, input[type="text"], input[type="tel"]{
+    border:none;
+    background:transparent;
+    font-family:'DM Sans', sans-serif;
+    font-size: 13.5px;
+    color: var(--navy);
+    width:100%;
+    outline:none;
+    padding-top:2px;
+  }
+  input[type="text"]::placeholder, input[type="tel"]::placeholder, textarea::placeholder{ color: var(--muted); }
+  textarea{ resize:none; font-size: 14px; color: var(--ink); }
+  select option{ color:#222; }
+  select option:disabled{ color:#999; }
+
+  .date-overlay-input{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    opacity:0; border:0; margin:0; padding:0;
+    cursor:pointer;
+    -webkit-appearance:none; appearance:none;
+  }
+  .form-field.locked .date-overlay-input{ pointer-events:none; }
+
+  .policy-note{
+    margin: 18px 20px 0;
+    background: rgba(200,134,46,0.10);
+    border: 1px solid rgba(200,134,46,0.35);
+    border-left: 4px solid var(--amber, #c8862e);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display:flex;
+    align-items:flex-start;
+    gap: 10px;
+  }
+  .policy-note svg{ width:18px; height:18px; color: var(--amber, #c8862e); flex-shrink:0; margin-top:1px; }
+  .policy-note-text{ font-size: 12.8px; line-height:1.5; color: var(--ink); }
+  .policy-note-text strong{ color: var(--amber, #c8862e); }
+
+  .continue-btn{
+    margin: 26px 20px 0;
+    background: var(--coral);
+    color:#fff;
+    text-align:center;
+    padding: 16px;
+    border-radius: 14px;
+    font-weight:700;
+    font-size: 16px;
+    cursor:pointer;
+    box-shadow: 0 8px 18px rgba(216,80,60,0.3);
+    user-select:none;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity .2s ease, box-shadow .2s ease;
+  }
+  .continue-btn.disabled{ opacity: 0.42; box-shadow:none; cursor:not-allowed; }
+  .continue-btn.loading{ opacity: 0.7; cursor:wait; }
+
+  .footer-note{
+    text-align:center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 20px;
+    padding: 0 30px;
+    line-height:1.5;
+  }
+
+  /* ---------- Aviso (toast) ---------- */
+  .badge{
+    position:fixed;
+    bottom: 14px;
+    left:50%;
+    transform: translateX(-50%);
+    background: var(--card);
+    color: var(--ink);
+    font-size: 11.5px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity .2s ease, transform .2s ease;
+    white-space:nowrap;
+    max-width: 90vw;
+    text-align:center;
+    border: 1px solid var(--border);
+  }
+  .badge.show{ opacity:1; transform: translateX(-50%) translateY(-6px); }
+  .badge.error{ background: var(--coral); }
+  .badge.success{ background: #4a8a5f; }
+
+  /* ---------- Popup de confirmação + confete ---------- */
+  .confirm-overlay{
+    position:fixed; inset:0;
+    background: rgba(0,0,0,0.7);
+    display:flex; align-items:center; justify-content:center;
+    padding: 24px;
+    z-index: 500;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity .25s ease;
+  }
+  .confirm-overlay.show{ opacity:1; pointer-events:auto; }
+  #confettiCanvas{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+  .confirm-card{
+    position:relative;
+    background: var(--card);
+    border-radius: 20px;
+    padding: 32px 26px 26px;
+    max-width: 340px;
+    width:100%;
+    text-align:center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    transform: scale(0.85) translateY(10px);
+    opacity:0;
+    transition: transform .3s ease, opacity .3s ease;
+  }
+  .confirm-overlay.show .confirm-card{ transform: scale(1) translateY(0); opacity:1; }
+  .confirm-emoji{ font-size: 44px; margin-bottom: 8px; }
+  .confirm-title{ font-size: 21px; font-weight:700; color: var(--ink); margin-bottom: 8px; }
+  .confirm-sub{ font-size: 14px; color: var(--muted); line-height:1.5; margin-bottom: 22px; }
+  .confirm-close-btn{
+    background: var(--coral);
+    color:#fff;
+    font-weight:700;
+    font-size: 14.5px;
+    padding: 13px;
+    border-radius: 12px;
+    cursor:pointer;
+    user-select:none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ---------- Botão "Início" (topo esquerdo) ---------- */
+  .back-link{
+    position:absolute;
+    top: calc(14px + env(safe-area-inset-top, 0px));
+    left: 16px;
+    z-index: 5;
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    padding: 9px 16px 9px 12px;
+    border-radius: 999px;
+    background: rgba(12,9,6,.62);
+    border: 1px solid rgba(243,234,217,.35);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: var(--ink);
+    font-family:'Poppins', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: .3px;
+    text-decoration:none;
+    transition: border-color .15s ease, color .15s ease, transform .15s ease;
+  }
+  .back-link svg{ width:16px; height:16px; }
+  .back-link:hover{ color: var(--navy); border-color: var(--navy); transform: translateX(-2px); }
+  .back-link:focus-visible{ outline: 2px solid var(--navy); outline-offset: 3px; }
+
+  /* ---------- Hero + logo ---------- */
+  .hero{
+    position:relative;
+    height: 220px;
+    overflow:hidden;
+    background:#0c0906;
+  }
+  .hero img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background: linear-gradient(180deg, rgba(12,9,6,.5), rgba(12,9,6,0) 40%, rgba(12,9,6,.55));
+  }
+
+  /* ---------- Marca centralizada: selo + wordmark desenhado ---------- */
+  .brand{
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+    padding: 0 20px;
+  }
+  .brand__mark{
+    width:116px; height:116px;
+    border-radius:50%;
+    border:5px solid var(--cream);
+    background: var(--navy-deep);
+    margin-top:-58px;
+    box-shadow: 0 10px 24px rgba(0,0,0,.4);
+    position:relative;
+  }
+  .brand__mark svg{ width:100%; height:100%; display:block; }
+  .brand__word{ width:min(300px, 78vw); height:auto; margin-top:24px; display:block; overflow:visible; }
+  .brand__tag{
+    display:flex; align-items:center; gap:12px;
+    margin-top:14px;
+    font-family:'Poppins', sans-serif;
+    font-size:11px; font-weight:600;
+    letter-spacing:.5em; text-transform:uppercase;
+    color: var(--navy);
+  }
+  .brand__tag::before, .brand__tag::after{ content:""; width:28px; height:1px; background: var(--navy); opacity:.7; }
+  .brand__tag::before{ margin-right:.5em; }
+  .brand__loc{ font-size:14px; color: var(--muted); margin-top:14px; }
+
+  /* Letras desenhadas à mão (traço único) — entram escrevendo, uma vez só */
+  .draw{ fill:none; stroke: var(--ink); stroke-width:5; stroke-linecap:round; stroke-linejoin:round; }
+  .draw path{
+    stroke-dasharray:1;
+    animation: bjdraw .9s cubic-bezier(.5,0,.2,1) both;
+    animation-delay: calc(var(--i) * .08s + .2s);
+  }
+  .draw .wave{ stroke: var(--coral); }
+  @keyframes bjdraw{
+    0%{ stroke-dashoffset:1; opacity:0; }
+    2%{ opacity:1; }
+    100%{ stroke-dashoffset:0; opacity:1; }
+  }
+  @media (prefers-reduced-motion: reduce){ .draw path{ animation:none; } }
+
+</style>
+  <div class="hero">
+    <img src="https://guiaviajarmelhor.com.br/wp-content/uploads/2023/10/restaurantes-chiques-em-sao-paulo.jpeg" alt="Ben Juan Restaurant">
+    <a class="back-link" href="{% url 'index' %}" aria-label="Voltar ao início do site">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+      Início
+    </a>
+  </div>
+
+  <div class="brand">
+    <div class="brand__mark">
+      <!-- Selo: relógio sem ponteiros — o tempo vira maré (Recreio, "sem pressa") -->
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="60" cy="60" r="52" fill="none" style="stroke:var(--sand)" stroke-width="1.2" opacity=".55"/>
+        <circle cx="60" cy="60" r="43" fill="none" style="stroke:var(--sand)" stroke-width="6" pathLength="120" stroke-dasharray="2 8" transform="rotate(-93 60 60)"/>
+        <circle cx="60" cy="59" r="13" style="fill:var(--coral)"/>
+        <path d="M32 62q7-6 14 0t14 0t14 0t14 0V90H32Z" style="fill:var(--navy-deep)"/>
+        <path d="M32 62q7-6 14 0t14 0t14 0t14 0" fill="none" style="stroke:var(--sand)" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M36 73q6-5 12 0t12 0t12 0t12 0" fill="none" style="stroke:var(--sand)" stroke-width="2" stroke-linecap="round" opacity=".6"/>
+        <path d="M40 83q5-4 10 0t10 0t10 0t10 0" fill="none" style="stroke:var(--sand)" stroke-width="1.6" stroke-linecap="round" opacity=".35"/>
+      </svg>
+    </div>
+
+    <!-- Wordmark personalizado: letras desenhadas em traço único; a trave do A é uma onda -->
+    <svg class="brand__word" viewBox="0 0 340 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ben Juan">
+      <g class="draw">
+        <path pathLength="1" style="--i:0" d="M4 4V56M4 4H20A13 13 0 0 1 20 30H4M4 30H23A13 13 0 0 1 23 56H4"/>
+        <path pathLength="1" style="--i:1" transform="translate(49 0)" d="M4 4V56M4 4H30M4 30H24M4 56H30"/>
+        <path pathLength="1" style="--i:2" transform="translate(93 0)" d="M4 56V4L32 56V4"/>
+        <path pathLength="1" style="--i:3" transform="translate(146 0)" d="M18 4H42M30 4V38A18 18 0 0 1 12 56"/>
+        <path pathLength="1" style="--i:4" transform="translate(202 0)" d="M4 4V40A16 16 0 0 0 36 40V4"/>
+        <path pathLength="1" style="--i:5" transform="translate(254 0)" d="M2 56L19 4L36 56"/>
+        <path pathLength="1" style="--i:6.5" class="wave" transform="translate(254 0)" d="M9 40q5-6 10 0t10 0"/>
+        <path pathLength="1" style="--i:6" transform="translate(304 0)" d="M4 56V4L32 56V4"/>
+      </g>
+    </svg>
+
+    <div class="brand__tag">Restaurant</div>
+    <div class="brand__loc">Praia do Recreio · Recreio dos Bandeirantes, RJ</div>
+  </div>        

@@ -16,7 +16,7 @@
             font-family: 'DM Sans', sans-serif;
         }
         .page-wrap{ max-width: 640px; margin: 0 auto; padding: 24px 16px 60px; }
-        .voltar{ display: inline-block; margin-bottom: 16px; color: var(--navy); }
+        .voltar{ display: inline-block; margin-bottom: 16px; color: var(--navy); text-decoration: none; }
         .foto-produto{
             width: 100%;
             aspect-ratio: 4 / 3;
@@ -59,57 +59,12 @@
             padding: 10px 16px;
             border-radius: 10px;
             font-weight: 600;
-            margin-bottom: 16px;
-        }
-        .form-pedir{
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .form-pedir input[type=number]{
-            width: 80px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            color: var(--ink);
-        }
-        .btn-order{
-            background: var(--navy);
-            color: var(--navy-deep) !important;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            border-radius: 999px;
-            padding: 10px 24px;
-            border: none;
-        }
-        .btn-order:hover{ background: var(--amber); }
-        .btn-order:disabled{
-            background: var(--border);
-            color: var(--muted) !important;
-            cursor: not-allowed;
-        }
-        .btn-carrinho{
-            display: inline-block;
-            margin-top: 18px;
-            color: var(--navy);
-            font-weight: 600;
-            text-decoration: none;
-        }
-        .alert-success{
-            background: rgba(74,138,95,0.15);
-            border: 1px solid var(--green);
-            color: var(--ink);
         }
     </style>
 </head>
 <body>
     <div class="page-wrap">
-        <a href="{% url 'index' %}" class="voltar">&larr; Voltar ao cardápio</a>
-
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
+        <a href="{% url 'index' %}#projetos" class="voltar">&larr; Voltar ao cardápio</a>
 
         {% if produto.foto %}
             <img src="{{ produto.foto.url }}" alt="{{ produto.nome }}" class="foto-produto">
@@ -128,29 +83,8 @@
 
             {% if produto.esgotado %}
                 <div class="esgotado-aviso">⚠️ Este item está esgotado no momento.</div>
-                <button class="btn-order" disabled>Esgotado</button>
-            {% else %}
-                <form method="post" action="{% url 'carrinho_adicionar' produto.slug %}" class="form-pedir">
-                    {% csrf_token %}
-                    <input type="number" name="quantidade" value="1" min="1" class="form-control">
-                    <button type="submit" class="btn-order">Adicionar ao carrinho</button>
-                </form>
             {% endif %}
-
-            <a href="{% url 'carrinho_ver' %}" class="btn-carrinho">🛒 Ver carrinho</a>
         </div>
     </div>
-
-    <script>
-        // A mensagem verde de sucesso (ex: "produto adicionado ao carrinho")
-        // some sozinha depois de 3 segundos, em vez de ficar pra sempre.
-        document.querySelectorAll('.alert-success').forEach(function(alertEl){
-            setTimeout(function(){
-                alertEl.style.transition = 'opacity .4s ease';
-                alertEl.style.opacity = '0';
-                setTimeout(function(){ alertEl.remove(); }, 400);
-            }, 3000);
-        });
-    </script>
 </body>
 </html>
